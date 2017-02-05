@@ -24,23 +24,59 @@ char reverse(char * str, int length){
 	
 	return 0;
 }
+
+void printAsHex(char * str, int length){
+	for (int i = 0; i < length; i++){
+		printf("%x",*str);
+		str++;
+	}
+	printf("\n");
+}
+
+void printAsString(char*str, int length){
+	for (int i = 0; i < length; i++){
+		if(*str == '\n'){	
+			printf("\\n");
+		} else if (*str == '\t'){
+			printf("\\t");
+		} else if (*str == '\0'){
+			printf("\\0");
+		} else {
+			printf("%c", *str);
+		}
+		str++;
+	}
+	printf("\n");
+
+}
+
+void reverseAndPrint(char * str, int length){
+
+	printf("Reversing str: ");
+	printAsString(str, length);
+	printf("\t");
+	printAsHex(str, length);
+
+	reverse(str, length);
+
+	printf("Reversed: ");
+	printAsString(str, length);
+	printf("\t");
+	printAsHex(str, length);
+
+	printf("\n");
+}
 int main(void) {
-	char blah[8] = "reverse!";
+	//char blah[8] = "reverse!";
 
 	char str1[17] = "This is a string.";
-	printf("Reversing:\t '%s'\n",str1);
-	reverse(str1,17);
-	printf("\t\t '%s'\n",str1);
+	reverseAndPrint(str1, 17);
 
 	char str2[18] = "some NUMmbers12345";
-	printf("Reversing:\t '%s'\n",str2);
-	reverse(str2,18);
-	printf("\t\t '%s'\n",str2);
+	reverseAndPrint(str2, 18);
 
 	char str3[30] = "Does it reverse \n\0\t correctly?";
-	printf("Reversing:\t '%s'\n",str3);
-	reverse(str3,30);
-	printf("\t\t '%s'\n",str3);
+	reverseAndPrint(str3, 30);
 	return 0;
 }
 
