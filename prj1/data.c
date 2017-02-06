@@ -66,14 +66,6 @@ int8_t little_to_big32(uint32_t * data, uint32_t length){
 
 /**************
 * print_memory()
-*	description: 
-*		i. This takes a pointer to memory and prints the hex output of bytes given a pointer to a memory location and a length of bytes to print.
-*		NOTE: This function uses printf.
-*	params:
-*		uint32_t * data - pointer to memory
-*		uint32_t length - length of the data to print (in bytes)
-*	returns:
-*		none
 **************/
 void print_memory(uint8_t * start, uint32_t length){
 	printf("0x ");

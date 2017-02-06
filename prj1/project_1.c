@@ -1,5 +1,9 @@
 #include "project_1.h"
 
+//global pointers so functions can all access data sets
+uint8_t * setPtr_1;
+uint8_t * setPtr_2;
+uint8_t * setPtr_3;
 
 /**************
 * project_1_report()
@@ -13,16 +17,26 @@
 *		none
 **************/
 void project_1_report(void){
-	//uint32_t * set_1[32] = 0x0123456789ABCDEF0123456789ABCDEF;
-	uint8_t set_2[32];
-	uint8_t * setPtr_2 = set_2;
+	uint8_t set_1[32]; //0x0123456789ABCDEF0123456789ABCDEF;
+	setPtr_1 = set_1;
 	for (uint8_t i = 0; i < 32; i++){
-		*setPtr_2 = i;
-		setPtr_2++;
+		if (i < 16){
+			*(setPtr_1 + i)= i;
+		} else {
+			*(setPtr_1 + i)= i-16;
+		}
 	}
-	//uint32_t *set_3[32] = abcdefghijklmnopqrstuvwxyzABCDEF;
 	
-	test_memory(set_2);
+	uint8_t set_2[32];
+	setPtr_2 = set_2;
+	for (uint8_t i = 0; i < 32; i++){
+		*(setPtr_2 + i)= i;
+	}
+	
+	//uint8_t set_3[32]; //abcdefghijklmnopqrstuvwxyzABCDEF;
+	//setPtr_3 = set_3;
+	
+	test_memory();
 	return;
 }
 
@@ -86,39 +100,26 @@ void test_data3(void){
 *	returns:
 *		none
 **************/
-void test_memory(uint8_t * ptr){
+void test_memory(void){
 	
+	uint32_t len = 32;
 	printf("index:\t   ");
-	for (int i = 0; i < 32; i++){
-		printf("%02d ", *(ptr + i));
+	for (int i = 0; i < len; i++){
+		printf("%02d ", *(setPtr_2 + i));
 	}
 	printf("\n");
-	uint32_t len = 32;
-	printf("1. \t");
-	print_memory(ptr, len); 
 
-	my_reverse(ptr, 12);
-	//printf("2. \t");
-	//print_memory(ptr, len);
-	
-	my_memset(ptr+16, 4, 0xEE);
-	//printf("3. \t");
-	//print_memory(ptr, len);
-	
-	my_memmove(ptr+25, ptr+19, 6);
-	//printf("4. \t");
-	//print_memory(ptr, len);
-	
-	my_memzero(ptr+11, 5);
-	//printf("5. \t");
-	//print_memory(ptr, len);
-	
-	my_memmove(ptr, ptr+8, 8);
-	//printf("6. \t");
-	//print_memory(ptr, len);
-	
+	printf("1. \t");
+	print_memory(setPtr_2, len); 
+
+	my_reverse(setPtr_2, 12);
+	my_memset(setPtr_2+16, 4, 0xEE);
+	my_memmove(setPtr_2+25, setPtr_2+19, 6);
+	my_memzero(setPtr_2+11, 5);
+	my_memmove(setPtr_2, setPtr_2+8, 8);
+
 	printf("7. \t");
-	print_memory(ptr, len);
+	print_memory(setPtr_2, len);
 	
 	return;
 }

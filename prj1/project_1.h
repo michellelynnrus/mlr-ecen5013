@@ -66,11 +66,11 @@ void test_data3(void);
 *			6. my_memmove(); Move the 8 bytes starting at the 1st byte ([0]), to the 9th position ([8])
 *			7. print_memory(); all 32 bytes
 *	params:
-*		none
+*		uint8_t * ptr - pointer to data 
 *	returns:
 *		none
 **************/
-void test_memory(uint8_t * ptr);
+void test_memory(void);
 
 
 #endif /* __PROJECT_1_H__ */
