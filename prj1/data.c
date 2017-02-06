@@ -1,5 +1,6 @@
 #include "data.h"
 
+#include <stdio.h>
 
 /**************
 * my_itoa()
@@ -43,8 +44,8 @@ int32_t my_atoi(int8_t * str){
 *		int8_t status - returns 0 if convert was successful, -1 if unsuccessful
 **************/
 int8_t big_to_little32(uint32_t * data, uint32_t length){
-	
-	return 0;
+	//literally just swapping bytes, they both do the same thing
+	return little_to_big32(data, length);
 }
 
 /**************
@@ -60,6 +61,27 @@ int8_t big_to_little32(uint32_t * data, uint32_t length){
 **************/
 int8_t little_to_big32(uint32_t * data, uint32_t length){
 	
+	if (data == NULL || length <= 0) {
+		//return non-zero code indicating failure
+		//NULL pointer or invalid length
+     	return -1; 
+	}
+	
+	int32_t * newPtr = data + length - 1;
+	int32_t tempVal;	
+
+	//Loop through the data and swap first/last values
+	//Repeat until we meet in the middle
+	for(int i = 0; i < length/2; i++){
+		tempVal = *data;
+		*data = *newPtr;
+		*newPtr = tempVal;
+
+		data++;
+		newPtr--;
+
+	}
+
 	return 0;
 }
 
@@ -68,6 +90,11 @@ int8_t little_to_big32(uint32_t * data, uint32_t length){
 * print_memory()
 **************/
 void print_memory(uint8_t * start, uint32_t length){
+	if (start == NULL) {
+		//NULL pointer, no status return val so printf (yay)
+		printf("print_memory error: NULL pointer\n");
+		return;
+	}
 	printf("0x ");
 	for (int i = 0; i < length; i++){
 		printf("%02x ", *(start + i));

@@ -17,6 +17,9 @@ uint8_t * setPtr_3;
 *		none
 **************/
 void project_1_report(void){
+	
+	//initializing data sets
+	
 	uint8_t set_1[32]; //0x0123456789ABCDEF0123456789ABCDEF;
 	setPtr_1 = set_1;
 	for (uint8_t i = 0; i < 32; i++){
@@ -36,7 +39,10 @@ void project_1_report(void){
 	//uint8_t set_3[32]; //abcdefghijklmnopqrstuvwxyzABCDEF;
 	//setPtr_3 = set_3;
 	
-	test_memory();
+	
+	// running test functions
+	test_data1();
+	//test_memory();
 	return;
 }
 
@@ -55,7 +61,18 @@ void project_1_report(void){
 *		none
 **************/
 void test_data1(void){
+	uint32_t * setPtr32_1 = (uint32_t *)setPtr_1;
+	printf("   ");
+	for (int i = 0; i < 32; i++){
+		printf("%02d ", *(setPtr_1 + i));
+	}
+	printf("\n");
 	
+	print_memory(setPtr_1, 32); 
+	big_to_little32(setPtr32_1, 32/4);
+	print_memory(setPtr_1, 32);
+	little_to_big32(setPtr32_1, 32/4); 
+	print_memory(setPtr_1, 32);
 	return;
 }
 

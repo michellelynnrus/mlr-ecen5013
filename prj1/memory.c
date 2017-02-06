@@ -1,13 +1,16 @@
 #include "memory.h"
 
+#include <stdio.h>
+
 /**************
 * my_memmove()
 **************/
 int8_t my_memmove(uint8_t * src, uint8_t * dst, uint32_t length){
 	
 	
-	if (length <= 0) {
-		//return non-zero code indicating failure, in this case length must be nonzero and positive
+	if (src == NULL || dst == NULL || length <= 0) {
+		//return non-zero code indicating failure
+		//NULL pointer or invalid length
      	return -1; 
 	}
 	
@@ -40,8 +43,9 @@ int8_t my_memmove(uint8_t * src, uint8_t * dst, uint32_t length){
 **************/
 int8_t my_memset(uint8_t * src, uint32_t length, uint8_t value){
 
-	if (length <= 0) {
-		//return non-zero code indicating failure, in this case length must be nonzero and positive
+	if (src == NULL || length <= 0) {
+		//return non-zero code indicating failure
+		//NULL pointer or invalid length
      	return -1; 
 	}
 
@@ -67,13 +71,16 @@ int8_t my_memzero(uint8_t * src, uint32_t length){
 * my_reverse()
 **************/
 int8_t my_reverse(uint8_t * src, uint32_t length){
-	int8_t * newPtr = src + length - 1;
-	int8_t tempVal;	
+
 	
-	if (length <= 0) {
-		//return non-zero code indicating failure, in this case length must be nonzero and positive
+	if (src == NULL || length <= 0) {
+		//return non-zero code indicating failure
+		//NULL pointer or invalid length
      	return -1; 
 	}
+	
+	int8_t * newPtr = src + length - 1;
+	int8_t tempVal;	
 
 	//Loop through the data and swap first/last values
 	//Repeat until we meet in the middle
