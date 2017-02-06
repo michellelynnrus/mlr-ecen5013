@@ -16,7 +16,7 @@
 *	returns:
 *		int8_t status - returns 0 if memmove was successful, -1 if unsuccessful
 **************/
-int8_t my_memmove(uint8_t * src, uint8_t * dst, uint32_length);
+int8_t my_memmove(uint8_t * src, uint8_t * dst, uint32_t length);
 
 /**************
 * my_memset()
@@ -56,7 +56,7 @@ int8_t my_memzero(uint8_t * src, uint32_t length);
 *	returns:
 *		int8_t status - returns 0 if reverse was successful, -1 if unsuccessful
 **************/
-int8_t my_memmove(uint8_t * src, uint32_t length);
+int8_t my_reverse(uint8_t * src, uint32_t length);
 
 
 

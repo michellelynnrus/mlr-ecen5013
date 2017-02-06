@@ -76,6 +76,10 @@ int8_t little_to_big32(uint32_t * data, uint32_t length){
 *		none
 **************/
 void print_memory(uint8_t * start, uint32_t length){
-	
+	printf("0x ");
+	for (int i = 0; i < length; i++){
+		printf("%02x ", *(start + i));
+	}
+	printf("\n");
 	return;
 }

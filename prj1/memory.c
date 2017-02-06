@@ -13,8 +13,20 @@
 *	returns:
 *		int8_t status - returns 0 if memmove was successful, -1 if unsuccessful
 **************/
-int8_t my_memmove(uint8_t * src, uint8_t * dst, uint32_length){
+int8_t my_memmove(uint8_t * src, uint8_t * dst, uint32_t length){
 	
+	if (length <= 0) {
+		//return non-zero code indicating failure, in this case length must be nonzero and positive
+     	return -1; 
+	}
+
+	//Loop through the data copy to new dst address
+	for(int i = 0; i < length; i++){
+		*dst = *src;
+		src++;
+		dst++;
+
+	}
 	return 0;
 }
 
@@ -31,7 +43,19 @@ int8_t my_memmove(uint8_t * src, uint8_t * dst, uint32_length){
 *		int8_t status - returns 0 if memset was successful, -1 if unsuccessful
 **************/
 int8_t my_memset(uint8_t * src, uint32_t length, uint8_t value){
-	
+
+	if (length <= 0) {
+		//return non-zero code indicating failure, in this case length must be nonzero and positive
+     	return -1; 
+	}
+
+	//Loop through the data and set values
+	for(int i = 0; i < length; i++){
+		*src = value;
+		src++;
+
+	}
+
 	return 0;
 }
 
@@ -48,7 +72,7 @@ int8_t my_memset(uint8_t * src, uint32_t length, uint8_t value){
 **************/
 int8_t my_memzero(uint8_t * src, uint32_t length){
 	
-	return 0;
+	return my_memset(src, length, 0);
 }
 
 /**************
@@ -62,7 +86,26 @@ int8_t my_memzero(uint8_t * src, uint32_t length){
 *	returns:
 *		int8_t status - returns 0 if reverse was successful, -1 if unsuccessful
 **************/
-int8_t my_memmove(uint8_t * src, uint32_t length){
+int8_t my_reverse(uint8_t * src, uint32_t length){
+	int8_t * newPtr = src + length - 1;
+	int8_t tempVal;	
+	
+	if (length <= 0) {
+		//return non-zero code indicating failure, in this case length must be nonzero and positive
+     	return -1; 
+	}
+
+	//Loop through the data and swap first/last values
+	//Repeat until we meet in the middle
+	for(int i = 0; i < length/2; i++){
+		tempVal = *src;
+		*src = *newPtr;
+		*newPtr = tempVal;
+
+		src++;
+		newPtr--;
+
+	}
 	
 	return 0;
 }

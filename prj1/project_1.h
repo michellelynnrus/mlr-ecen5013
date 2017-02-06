@@ -1,6 +1,7 @@
 #ifndef __PROJECT_1_H__
 #define __PROJECT_1_H__
 
+#include <stdio.h>
 #include <stdint.h>
 #include "data.h"
 #include "memory.h"
@@ -69,7 +70,7 @@ void test_data3(void);
 *	returns:
 *		none
 **************/
-void test_memory(void);
+void test_memory(uint8_t * ptr);
 
 
 #endif /* __PROJECT_1_H__ */
