@@ -1,4 +1,5 @@
 #include "data.h"
+#include "memory.h"
 
 #include <stdio.h>
 
@@ -14,7 +15,7 @@
 *		int8_t * - retStr - pointer to return data
 **************/
 int8_t * my_itoa(int8_t * str, int32_t data, int32_t base){
-
+	
 	return 0;
 }
 
@@ -34,30 +35,14 @@ int32_t my_atoi(int8_t * str){
 
 /**************
 * big_to_little32()
-*	description: 
-*		i. Needs to be able to convert data types in memory from a big endian representation to little endian.
-*		ii. Should return an error if the conversion fails for any reason.
-*	params:
-*		uint32_t * data - pointer to the source data
-*		uint32_t length - length of the data to convert (in bytes)
-*	returns:
-*		int8_t status - returns 0 if convert was successful, -1 if unsuccessful
 **************/
 int8_t big_to_little32(uint32_t * data, uint32_t length){
-	//literally just swapping bytes, they both do the same thing
+	//literally just swapping bytes, they both require the same code
 	return little_to_big32(data, length);
 }
 
 /**************
 * little_to_big32()
-*	description: 
-*		i. Needs to be able to convert data types in memory from a little endian representation to big endian.
-*		ii. Should return an error if the conversion fails for any reason.
-*	params:
-*		uint32_t * data - pointer to the source data
-*		uint32_t length - length of the data to convert (in bytes)
-*	returns:
-*		int8_t status - returns 0 if convert was successful, -1 if unsuccessful
 **************/
 int8_t little_to_big32(uint32_t * data, uint32_t length){
 	
@@ -67,19 +52,11 @@ int8_t little_to_big32(uint32_t * data, uint32_t length){
      	return -1; 
 	}
 	
-	int32_t * newPtr = data + length - 1;
-	int32_t tempVal;	
-
-	//Loop through the data and swap first/last values
-	//Repeat until we meet in the middle
-	for(int i = 0; i < length/2; i++){
-		tempVal = *data;
-		*data = *newPtr;
-		*newPtr = tempVal;
-
-		data++;
-		newPtr--;
-
+	uint8_t * byte;
+	//reverse the order of bytes in each 32 bit element
+	for (int i = 0; i < length; i++){
+		byte = (uint8_t *)(data + i);
+		my_reverse(byte, 4);
 	}
 
 	return 0;
