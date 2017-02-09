@@ -2,8 +2,11 @@
 
 //global pointers so functions can all access data sets
 uint8_t * setPtr_1;
-uint8_t * setPtr_2;
+int8_t * setPtr_2;
 uint8_t * setPtr_3;
+
+//global pointer for the array of arrays that itoa/atoi/test_data2 needs
+uint8_t * charArrPtr_2;
 
 /**************
 * project_1_report()
@@ -36,12 +39,17 @@ void project_1_report(void){
 		*(setPtr_2 + i)= i;
 	}
 	
-	//uint8_t set_3[32]; //abcdefghijklmnopqrstuvwxyzABCDEF;
-	//setPtr_3 = set_3;
+	*(setPtr_2 + 3) = -10;
+	*(setPtr_2 + 17) = 127;
 	
+	//converting 32 x 8 bits to max 8 chars (8 bits binary is max characters for int8) 
+	//	means we need a 256 char array. right!?
+	int8_t charArr_2[288];
+	charArrPtr_2 = charArr_2;
 	
 	// running test functions
-	test_data1();
+	//test_data1();
+	test_data2();
 	//test_memory();
 	return;
 }
@@ -78,13 +86,34 @@ void test_data1(void){
 
 /**************
 * test_data2()
-*		i. Show your data functions work by calling the following functions in this order with the second array,  set_2 :  my_itoa() & then  print_memory()
+*		i. Show your data functions work by calling the following functions in this order with the second array,  set_2 :  
+*			1. my_itoa()
+*			2. print_memory() 
+*			3. my_atoi()
+*			4. print_memory()
 *	params:
 *		none
 *	returns:
 *		none
 **************/
 void test_data2(void){
+
+	printf("   ");
+	for (int i = 0; i < 32; i++){
+		printf("%02d ", *(setPtr_2 + i));
+	}
+	printf("\n");
+	print_memory(setPtr_2, 32);
+	
+	for (int i = 0; i < 32; i++){
+		my_itoa(charArrPtr_2 + i*9, *(setPtr_2+i), 2);
+		//printf("i=%d: %s\n",i,(char *) (charArrPtr_2 + i*8));
+	}
+	
+	for (int i = 0; i < 32; i++){
+		printf("i=%d: %s\n",i,(char *) (charArrPtr_2 + i*9));
+	}
+	print_memory(charArrPtr_2, 288);
 	
 	return;
 }

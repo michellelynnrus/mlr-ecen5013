@@ -10,11 +10,55 @@
 *	params:
 *		int8_t * str - pointer to return data
 *		int8_t data - integer data to convert
-*		int32_t base - base of the integer (i.e. 10, 16, 2, etc)
+*		int32_t base - base of the ascii string to return (i.e. 10, 16, 2, etc)
 *	returns:
-*		int8_t * - retStr - pointer to return data
+*		int8_t * - retStr - pointer to return data 
 **************/
 int8_t * my_itoa(int8_t * str, int32_t data, int32_t base){
+	//int8_t rem = data;
+	int8_t i = 0;
+	uint8_t uData = data;
+	uint8_t rem = 0;
+	uint8_t negFlg = 0;
+	
+	if (data == 0) {
+		*str = '\0';
+	} else if (data < 0 && base == 10){
+		//handle the negative value
+		printf("negative\n");
+		uData = (uint8_t)(data * (-1));
+		/*if (base == 2){
+			uData += 1;
+		}*/
+		negFlg = 1;
+	}
+	
+	while (uData != 0){
+		rem = uData % base; 
+		
+		// add ascii offset
+		if (rem >= 10 ){
+			*(str+i)= rem + 55;
+		} else {
+			*(str+i) = rem + 48;
+		}
+		uData = uData/base; 
+		i++;
+	}
+	
+	if (base == 10 && negFlg){
+		*(str+i) = '-';
+		i++;
+	}
+	
+	
+	*(str+i) = '\0';
+	
+	//print_memory(str, i+1);
+	my_reverse(str, i);
+	//printf("len = %d\n", i);
+	//print_memory(str, 9);
+
 	
 	return 0;
 }
@@ -29,7 +73,7 @@ int8_t * my_itoa(int8_t * str, int32_t data, int32_t base){
 *		int32_t retInt - integer value converted from ASCII
 **************/
 int32_t my_atoi(int8_t * str){
-
+	
 	return 0;
 }
 

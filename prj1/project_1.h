@@ -37,7 +37,11 @@ void test_data1(void);
 
 /**************
 * test_data2()
-*		i. Show your data functions work by calling the following functions in this order with the second array,  set_2 :  my_itoa() & then  print_memory()
+*		i. Show your data functions work by calling the following functions in this order with the second array,  set_2 :  
+*			1. my_itoa()
+*			2. print_memory() 
+*			3. my_atoi()
+*			4. print_memory()
 *	params:
 *		none
 *	returns:
