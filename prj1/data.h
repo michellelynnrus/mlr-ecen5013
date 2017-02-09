@@ -11,7 +11,7 @@
 *		i. Integer-to-asciI needs to convert data from a standard integer type into an ascii string. Need to handle signed data.
 *	params:
 *		int8_t * str - pointer to return data
-*		int8_t data - integer data to convert
+*		int32_t data - integer data to convert
 *		int32_t base - base of the integer (i.e. 10, 16, 2, etc)
 *	returns:
 *		int8_t * - retStr - pointer to return data

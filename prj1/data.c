@@ -17,25 +17,27 @@
 int8_t * my_itoa(int8_t * str, int32_t data, int32_t base){
 	//int8_t rem = data;
 	int8_t i = 0;
-	uint8_t uData = data;
-	uint8_t rem = 0;
+
+	uint32_t rem = 0;
 	uint8_t negFlg = 0;
 	
+	//little_to_big32(&data, 1);
+	
+	uint32_t uData = data;
+	
 	if (data == 0) {
-		*str = '\0';
+		*str = '0';
+		i++;
 	} else if (data < 0 && base == 10){
 		//handle the negative value
-		printf("negative\n");
-		uData = (uint8_t)(data * (-1));
-		/*if (base == 2){
-			uData += 1;
-		}*/
+		printf("neg\n");
+		uData = (uint32_t)(data * (-1));
 		negFlg = 1;
 	}
 	
 	while (uData != 0){
 		rem = uData % base; 
-		
+
 		// add ascii offset
 		if (rem >= 10 ){
 			*(str+i)= rem + 55;
@@ -51,15 +53,10 @@ int8_t * my_itoa(int8_t * str, int32_t data, int32_t base){
 		i++;
 	}
 	
-	
 	*(str+i) = '\0';
 	
-	//print_memory(str, i+1);
 	my_reverse(str, i);
-	//printf("len = %d\n", i);
-	//print_memory(str, 9);
 
-	
 	return 0;
 }
 
@@ -73,8 +70,21 @@ int8_t * my_itoa(int8_t * str, int32_t data, int32_t base){
 *		int32_t retInt - integer value converted from ASCII
 **************/
 int32_t my_atoi(int8_t * str){
+	uint8_t i = 0;
+	uint8_t len = 0;
+	int32_t data = 0;
 	
-	return 0;
+	while (*(str + len) != '\0'){
+		len++;	
+	}
+
+	for (i = 0; i < len; i++){
+		data = data * 10 + *(str+i) - 48 ;
+	}
+	
+	//little_to_big32(&data, 1);
+	
+	return data;
 }
 
 /**************
