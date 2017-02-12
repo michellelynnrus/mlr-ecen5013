@@ -53,7 +53,8 @@ void project_1_report(void){
 	test_data1();
 	printf("\n\nTEST_DATA2: \n");
 	test_data2();
-	//test_memory();
+	printf("\n\nTEST_MEMORY: \n");
+	test_memory();
 	return;
 }
 
@@ -143,11 +144,6 @@ void test_data2(void){
 void test_memory(void){
 	
 	uint32_t len = 32;
-	printf("index:\t   ");
-	for (int i = 0; i < len; i++){
-		printf("%02d ", *(setPtr_2 + i));
-	}
-	printf("\n");
 
 	printf("1. \t");
 	print_memory(setPtr_2, len); 
