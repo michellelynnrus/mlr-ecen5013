@@ -21,7 +21,11 @@ int8_t * my_itoa(int8_t * str, int32_t data, int32_t base){
 	uint32_t rem = 0;
 	uint8_t negFlg = 0;
 	
-	//little_to_big32(&data, 1);
+	//check for NULL ptr
+	if (str == NULL){
+		//return pointer to an error code -1
+		return (int8_t *) -1;
+	}
 	
 	uint32_t uData = data;
 	
@@ -57,7 +61,7 @@ int8_t * my_itoa(int8_t * str, int32_t data, int32_t base){
 	
 	my_reverse(str, i);
 
-	return 0;
+	return str;
 }
 
 /**************
@@ -73,13 +77,31 @@ int32_t my_atoi(int8_t * str){
 	uint8_t i = 0;
 	uint8_t len = 0;
 	int32_t data = 0;
+	uint8_t negFlg = 0;
+	
+		//check for NULL ptr
+	if (str == NULL){
+		//return an error code -1
+		return -1;
+	}
 	
 	while (*(str + len) != '\0'){
 		len++;	
 	}
 
-	for (i = 0; i < len; i++){
+	if (*str == '-'){
+		printf("neg\n");
+		negFlg = 1;
+		i++;
+	}
+		
+	while (i < len){
 		data = data * 10 + *(str+i) - 48 ;
+		i++;
+	}
+	
+	if (negFlg){
+		data = data * (-1);
 	}
 	
 	//little_to_big32(&data, 1);

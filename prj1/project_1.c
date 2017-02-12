@@ -1,12 +1,12 @@
 #include "project_1.h"
 
 //global pointers so functions can all access data sets
-uint8_t * setPtr_1;
-int8_t * setPtr_2;
-uint8_t * setPtr_3;
+uint8_t * setPtr_1 = NULL;
+int8_t * setPtr_2 = NULL;
+uint8_t * setPtr_3 = NULL;
 
 //global pointer for the array of arrays that itoa/atoi/test_data2 needs
-uint8_t * charArrPtr_2;
+uint8_t * charArrPtr_2 = NULL;
 
 /**************
 * project_1_report()
@@ -39,17 +39,19 @@ void project_1_report(void){
 		*(setPtr_2 + i)= i;
 	}
 	
-//	*(setPtr_2 + 0) = 50;
-//	*(setPtr_2 + 3) = -10;
-//	*(setPtr_2 + 17) = 127;
-	
-	//converting 32 x 8 bits to max 8 chars (8 bits binary is max characters for int8) 
-	//	means we need a 256 char array. right!?
-	int8_t charArr_2[1056];
+	//set_2 is 32 8-bit integers, equivalent to 8 32-bit integers
+	// the max chars needed to represent a 32 bit integer is sizeof(char)*32
+	//   because each bit needs a char if converted to binary
+	//   + 1 extra char for the string end character
+	// This means to represent each integer as a string we need a max of:
+	//   8 chars * (32 bits + 1 end char) = 264
+	int8_t charArr_2[264];
 	charArrPtr_2 = charArr_2;
 	
 	// running test functions
-	//test_data1();
+	printf("TEST_DATA1: \n");
+	test_data1();
+	printf("\n\nTEST_DATA2: \n");
 	test_data2();
 	//test_memory();
 	return;
@@ -71,11 +73,6 @@ void project_1_report(void){
 **************/
 void test_data1(void){
 	uint32_t * setPtr32_1 = (uint32_t *)setPtr_1;
-	printf("   ");
-	for (int i = 0; i < 32; i++){
-		printf("%02d ", *(setPtr_1 + i));
-	}
-	printf("\n");
 	
 	print_memory(setPtr_1, 32); 
 	big_to_little32(setPtr32_1, 32/4);
@@ -99,32 +96,31 @@ void test_data1(void){
 **************/
 void test_data2(void){
 	int32_t conv = 0;
-	printf("   ");
-	for (int i = 0; i < 32; i++){
-		printf("%02d ", *(setPtr_2 + i));
-	}
-	printf("\n");
-	print_memory(setPtr_2, 32);
 	
+	// loop through the 8 32-bit integers
+	// store the string in each 33 bytes of charArrPtr_2 
+	//   (it is sized this way to hold max 32 chars + string end char because binary)
 	for (int i = 0; i < 8; i++){
-		my_itoa(charArrPtr_2 + i*33, *((int32_t * )(setPtr_2)+i), 10);
-		printf("i=%d, itoa: %s\n",i,(char *) (charArrPtr_2 + i*33));
+		my_itoa(charArrPtr_2 + i*33, *((int32_t *)setPtr_2+i), 10);
+		printf("i=%d itoa: %s, ",i,(char *) (charArrPtr_2 + i*33));
+		//print_memory(charArrPtr_2 + i*33, 33);
 	}
-	printf("set_2:\n");
+	printf("\nset_2: ");
 	print_memory(setPtr_2, 32);
-	//printf("charArr:\n");
-	//print_memory(charArrPtr_2, 1056);
+	printf("charArr: ");
+	print_memory(charArrPtr_2, 264);
 	
 	for (int i = 0; i < 8; i++){
 
 		conv = my_atoi(charArrPtr_2 + i*33);
-		printf("i=%d, atoi: %d\n",i, conv);
+		printf("i=%d atoi: %d, ",i, conv);
 		*(setPtr_2 + i*4) = conv;
 		//print_memory(&conv, 4);
 		
 	}
+	printf("\nset_2: ");
 	print_memory(setPtr_2, 32);
-	//print_memory(setPtr_2, 32);
+
 	return;
 }
 
