@@ -49,11 +49,17 @@ void project_1_report(void){
 	charArrPtr_2 = charArr_2;
 	
 	// running test functions
+#if (PLATFORM_CODE!=2)
 	printf("TEST_DATA1: \n");
+#endif
 	test_data1();
+#if (PLATFORM_CODE!=2)
 	printf("\n\nTEST_DATA2: \n");
+#endif
 	test_data2();
+#if (PLATFORM_CODE!=2)
 	printf("\n\nTEST_MEMORY: \n");
+#endif
 	test_memory();
 	return;
 }
@@ -103,23 +109,24 @@ void test_data2(void){
 	//   (it is sized this way to hold max 32 chars + string end char because binary)
 	for (int i = 0; i < 8; i++){
 		my_itoa((int8_t *)(charArrPtr_2 + i*33), *((int32_t *)setPtr_2+i), 10);
-		printf("i=%d itoa: %s, ",i,(char *) (charArrPtr_2 + i*33));
+		//printf("i=%d itoa: %s, ",i,(char *) (charArrPtr_2 + i*33));
 		//print_memory(charArrPtr_2 + i*33, 33);
 	}
-	printf("\nset_2: ");
+
+	//printf("\nset_2: ");
 	print_memory(setPtr_2, 32);
-	printf("charArr: ");
+	//printf("charArr: ");
 	print_memory(charArrPtr_2, 264);
 	
 	for (int i = 0; i < 8; i++){
 
 		conv = my_atoi((int8_t *)charArrPtr_2 + i*33);
-		printf("i=%d atoi: %d, ",i, conv);
+		//printf("i=%d atoi: %d, ",i, conv);
 		*(setPtr_2 + i*4) = conv;
 		//print_memory(&conv, 4);
 		
 	}
-	printf("\nset_2: ");
+	//printf("\nset_2: ");
 	print_memory(setPtr_2, 32);
 
 	return;
@@ -151,7 +158,7 @@ void test_memory(void){
 	printf("\n");
 	*/
 	
-	printf("1. \t");
+	//printf("1. \t");
 	print_memory(setPtr_2, len); 
 
 	my_reverse(setPtr_2, 12);
@@ -160,7 +167,7 @@ void test_memory(void){
 	my_memzero(setPtr_2+11, 5);
 	my_memmove(setPtr_2, setPtr_2+8, 8);
 
-	printf("7. \t");
+	//printf("7. \t");
 	print_memory(setPtr_2, len);
 	
 	return;

@@ -11,6 +11,9 @@ CC=gcc
 CSTD=c99
 TARGET=project1
 PLATFORM_FLAGS= -march=$(CPU)
+PROJECT=1
+PLATFORM_CODE=0
+SIZE=size
 
 # TRY THIS
 ifeq ($(ARCH),armv7l)
@@ -22,16 +25,20 @@ ifeq ($(PLATFORM),frdm)
 	CPU=cortex-m0plus
 	CC=arm-none-eabi-gcc
 	PLATFORM_FLAGS=-mcpu=$(CPU) --specs=$(SPECS) -mthumb
+	PLATFORM_CODE=2
+	SIZE=arm-none-eabi-size
 endif
 
 ifeq ($(PLATFORM),bbb)
 	CPU=cortex-a8
 	CC=arm-linux-gnueabihf-gcc
 	PLATFORM_FLAGS=-mcpu=$(CPU) -mthumb
+	PLATFORM_CODE=1
+	SIZE=arm-linux-gnueabihf-size
 endif
 				
 				
-CFLAGS= $(PLATFORM_FLAGS) -std=$(CSTD) -g -Wall -Werror -O0
+CFLAGS= $(PLATFORM_FLAGS) -std=$(CSTD) -g -Wall -Werror -O0 -D PROJECT=$(PROJECT) -D PLATFORM_CODE=$(PLATFORM_CODE)
 LDFLAGS= -Wl,-Map=$(TARGET).map
 OBJS:=$(SRCS:.c=.o)
 PRES:=$(SRCS:.c=.i)
@@ -47,15 +54,16 @@ ASMS:=$(SRCS:.c=.asm)
 %.asm: %.c
 	$(CC) -S $^ -o $@ $(CFLAGS)
 		 
-.PHONY: all
-all: $(TARGET)
+.PHONY: build
+build: $(TARGET)
 
 .PHONY: compile-all
 compile-all: $(OBJS)
-	$(CC) $^ $(CFLAGS) $(LDFLAGS) $(INCLUDES) -c -o $@
+	$(CC) $^ $(INCLUDES) -c -o $@
 
 $(TARGET): $(OBJS)
 	$(CC) $^ $(CFLAGS) $(LDFLAGS) $(INCLUDES) -o $@
+	$(SIZE) $(TARGET)
 	
 
 #main.out: $(OBJS)

@@ -148,10 +148,13 @@ void print_memory(uint8_t * start, uint32_t length){
 		printf("print_memory error: NULL pointer\n");
 		return;
 	}
+#if (PLATFORM_CODE != 2)
+	//only run printf commands if not the FRDM board
 	printf("0x ");
 	for (int i = 0; i < length; i++){
 		printf("%02x ", *(start + i));
 	}
 	printf("\n");
+#endif
 	return;
 }
