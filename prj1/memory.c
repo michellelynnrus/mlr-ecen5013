@@ -21,19 +21,14 @@ int8_t my_memmove(uint8_t * src, uint8_t * dst, uint32_t length){
 		uint8_t * tmpDataPtr = tmpData;
 		//Loop through the data copy to new dst address
 		for(int i = 0; i < length; i++){
-			*tmpDataPtr = *src;
-			src++;
-			*tmpDataPtr++;
-
+			*(tmpDataPtr + i) = *(src + i);
 		}
-		src = tmpDataPtr - (length-1);
+		//src = tmpDataPtr - (length-1);
 	}
 	
 	//Loop through the data copy to new dst address
-	for(int i = 0; i < length; i++){
-		*dst = *src;
-		src++;
-		*dst++;
+	for(uint8_t i = 0; i < length; i++){
+		*(dst+i) = *(src+i);
 	}
 	return 0;
 }
@@ -50,7 +45,7 @@ int8_t my_memset(uint8_t * src, uint32_t length, uint8_t value){
 	}
 
 	//Loop through the data and set values
-	for(int i = 0; i < length; i++){
+	for(uint8_t i = 0; i < length; i++){
 		*src = value;
 		src++;
 
@@ -79,12 +74,12 @@ int8_t my_reverse(uint8_t * src, uint32_t length){
      	return -1; 
 	}
 	
-	int8_t * newPtr = src + length - 1;
-	int8_t tempVal;	
+	uint8_t * newPtr = src + length - 1;
+	uint8_t tempVal;	
 
 	//Loop through the data and swap first/last values
 	//Repeat until we meet in the middle
-	for(int i = 0; i < length/2; i++){
+	for(uint8_t i = 0; i < length/2; i++){
 		tempVal = *src;
 		*src = *newPtr;
 		*newPtr = tempVal;

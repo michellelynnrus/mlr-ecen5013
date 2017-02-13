@@ -59,7 +59,7 @@ int8_t * my_itoa(int8_t * str, int32_t data, int32_t base){
 	
 	*(str+i) = '\0';
 	
-	my_reverse(str, i);
+	my_reverse((uint8_t *)str, i);
 
 	return str;
 }

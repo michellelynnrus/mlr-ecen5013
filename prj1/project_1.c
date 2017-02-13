@@ -2,7 +2,7 @@
 
 //global pointers so functions can all access data sets
 uint8_t * setPtr_1 = NULL;
-int8_t * setPtr_2 = NULL;
+uint8_t * setPtr_2 = NULL;
 uint8_t * setPtr_3 = NULL;
 
 //global pointer for the array of arrays that itoa/atoi/test_data2 needs
@@ -45,7 +45,7 @@ void project_1_report(void){
 	//   + 1 extra char for the string end character
 	// This means to represent each integer as a string we need a max of:
 	//   8 chars * (32 bits + 1 end char) = 264
-	int8_t charArr_2[264];
+	uint8_t charArr_2[264];
 	charArrPtr_2 = charArr_2;
 	
 	// running test functions
@@ -102,7 +102,7 @@ void test_data2(void){
 	// store the string in each 33 bytes of charArrPtr_2 
 	//   (it is sized this way to hold max 32 chars + string end char because binary)
 	for (int i = 0; i < 8; i++){
-		my_itoa(charArrPtr_2 + i*33, *((int32_t *)setPtr_2+i), 10);
+		my_itoa((int8_t *)(charArrPtr_2 + i*33), *((int32_t *)setPtr_2+i), 10);
 		printf("i=%d itoa: %s, ",i,(char *) (charArrPtr_2 + i*33));
 		//print_memory(charArrPtr_2 + i*33, 33);
 	}
@@ -113,7 +113,7 @@ void test_data2(void){
 	
 	for (int i = 0; i < 8; i++){
 
-		conv = my_atoi(charArrPtr_2 + i*33);
+		conv = my_atoi((int8_t *)charArrPtr_2 + i*33);
 		printf("i=%d atoi: %d, ",i, conv);
 		*(setPtr_2 + i*4) = conv;
 		//print_memory(&conv, 4);
@@ -144,7 +144,13 @@ void test_data2(void){
 void test_memory(void){
 	
 	uint32_t len = 32;
-
+	/*printf("index:\t   ");
+	for (int i = 0; i < len; i++){
+		printf("%02d ", *(setPtr_2 + i));
+	}
+	printf("\n");
+	*/
+	
 	printf("1. \t");
 	print_memory(setPtr_2, len); 
 
