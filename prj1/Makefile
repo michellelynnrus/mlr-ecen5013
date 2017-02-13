@@ -13,8 +13,7 @@ TARGET=project1
 PLATFORM_FLAGS= -march=$(CPU)
 
 # TRY THIS
-OS:=$(shell uname -s)
-ifneq ($(OS),Linux)
+ifeq ($(ARCH),armv7l)
 	PLATFORM=bbb
 endif
 
