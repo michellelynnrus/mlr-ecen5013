@@ -1,21 +1,62 @@
-#begin makefile
-#write comments up here
+# Filename: Makefile
+# Includes: sources.mk
+# Description: makefile to compile and build ECEN5013 project 1
+# Targets: 
+#	- build: builds and links whole project. generates individual .o files, project1 output file, and .map file
+#	- compile-all: builds all files but does not link. generates individual .o files
+#	- clean: removes all .o, .i, .asm, .map files and project1 output file
+#	- *.o: generates individual .o file
+#	- *.i: generates individual .i file
+#	- *.asm: generates individual .asm file
+# Platforms: 
+#	- Linux VM host machine native compile (default unless bbb architecture detected)
+#	- Linux VM host machine cross compile for Beaglebone Black
+#	- Linux VM host machine cross compile for FRDM-KL25Z
+#	- Beaglebone Black native compile (default IF bbb architecture is detected)
+# Parameters: all parameters are optional, defaults are noted below
+#	- PROJECT: specifies what project is running and defines compile time switch in main.c and output filename
+#		- default = 1
+#	- PLATFORM: specifies what platform to compile for. defines compile time switch for whether to disable printf
+#		- default = host, automatically changed to bbb if shell arch command returns bbb architecture
+#	- DEBUG: enables -g flag if set to true
+#		- default = false
+#	- WALL: enables -Wall flag if set to true
+#		- default = false
+#	- WERROR: enables -Werror flag if set to true
+#		- default = false
+#	- OPT0: enables -O0 flag if set to true
+#		- default = false
+#	- CSTD: defines the c standard
+#		- default = c99
 
 include sources.mk
 
+#variables can be changed when calling make
+PROJECT = 1
 PLATFORM = host
-CPU = native
-ARCH = $(shell arch)
-SPECS = nosys.specs
-CC=gcc
+DEBUG = false
+WALL = false
+WERROR = false
+OPT0 = false
+
+#default for all platforms
 CSTD=c99
-TARGET=project1
-PLATFORM_FLAGS= -march=$(CPU)
-PROJECT=1
+
+#variables to use as #defines for compile time switching
+TARGET=project$(PROJECT)
 PLATFORM_CODE=0
+
+#default values for Linux VM host platform
+CPU = native
+PLATFORM_FLAGS= -march=$(CPU)
+CC=gcc
 SIZE=size
 
-# TRY THIS
+#default for other platforms
+SPECS = nosys.specs
+
+#determine if native compiling on bbb (if so, default platform to BBB rather than VM host)
+ARCH = $(shell arch)
 ifeq ($(ARCH),armv7l)
 	PLATFORM=bbb
 endif
@@ -37,14 +78,34 @@ ifeq ($(PLATFORM),bbb)
 	SIZE=arm-linux-gnueabihf-size
 endif
 				
-				
-CFLAGS= $(PLATFORM_FLAGS) -std=$(CSTD) -g -Wall -Werror -O0 -D PROJECT=$(PROJECT) -D PLATFORM_CODE=$(PLATFORM_CODE)
+#define flags
+CFLAGS= $(PLATFORM_FLAGS) -std=$(CSTD) -D PROJECT=$(PROJECT) -D PLATFORM_CODE=$(PLATFORM_CODE)
+
+#add additional flags if requested
+ifeq ($(DEBUG),true)
+	CFLAGS += -g
+endif
+
+ifeq ($(WALL),true)
+	CFLAGS += -Wall
+endif
+
+ifeq ($(WERROR),true)
+	CFLAGS += -Werror
+endif
+
+ifeq ($(OPT0),true)
+	CFLAGS += -O0
+endif
+
 LDFLAGS= -Wl,-Map=$(TARGET).map
+
+#generate object, preprocessed output, and assembly file lists from sources
 OBJS:=$(SRCS:.c=.o)
 PRES:=$(SRCS:.c=.i)
 ASMS:=$(SRCS:.c=.asm)
 
-
+#targets
 %.o: %.c
 	$(CC) -c $^ -o $@ $(CFLAGS)
 	
@@ -64,10 +125,6 @@ compile-all: $(OBJS)
 $(TARGET): $(OBJS)
 	$(CC) $^ $(CFLAGS) $(LDFLAGS) $(INCLUDES) -o $@
 	$(SIZE) $(TARGET)
-	
-
-#main.out: $(OBJS)
-#	$(CC) $(CFLAGS) -o $@ $^
 	
 .PHONY: clean
 clean:
