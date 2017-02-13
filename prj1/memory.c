@@ -58,7 +58,7 @@ int8_t my_memset(uint8_t * src, uint32_t length, uint8_t value){
 * my_memzero()
 **************/
 int8_t my_memzero(uint8_t * src, uint32_t length){
-	
+	//call memset and pass in 0 as the value to set 
 	return my_memset(src, length, 0);
 }
 

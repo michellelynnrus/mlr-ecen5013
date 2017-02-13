@@ -5,17 +5,9 @@
 
 /**************
 * my_itoa()
-*	description: 
-*		i. Integer-to-asciI needs to convert data from a standard integer type into an ascii string. Need to handle signed data.
-*	params:
-*		int8_t * str - pointer to return data
-*		int8_t data - integer data to convert
-*		int32_t base - base of the ascii string to return (i.e. 10, 16, 2, etc)
-*	returns:
-*		int8_t * - retStr - pointer to return data 
 **************/
 int8_t * my_itoa(int8_t * str, int32_t data, int32_t base){
-	//int8_t rem = data;
+
 	int8_t i = 0;
 
 	uint32_t rem = 0;
@@ -33,10 +25,9 @@ int8_t * my_itoa(int8_t * str, int32_t data, int32_t base){
 		*str = '0';
 		i++;
 	} else if (data < 0 && base == 10){
-		//handle the negative value
-		printf("neg\n");
+		//handle the negative value - make the value a positive, unsigned integer
 		uData = (uint32_t)(data * (-1));
-		negFlg = 1;
+		negFlg = 1; //set a negative indicator flag
 	}
 	
 	while (uData != 0){
@@ -52,13 +43,16 @@ int8_t * my_itoa(int8_t * str, int32_t data, int32_t base){
 		i++;
 	}
 	
+	//add a negative sign if the value was determined to be negative earlier
 	if (base == 10 && negFlg){
 		*(str+i) = '-';
 		i++;
 	}
 	
+	//string end character
 	*(str+i) = '\0';
 	
+	//reverse the string so it's in the correct order
 	my_reverse((uint8_t *)str, i);
 
 	return str;
@@ -66,12 +60,6 @@ int8_t * my_itoa(int8_t * str, int32_t data, int32_t base){
 
 /**************
 * my_atoi()
-*	description: 
-*		i. AsciI-to-Integer needs to convert data back from an ASCII represented string into an integer type. Need to handle signed data.
-*	params:
-*		int8_t * str - pointer to ASCII string to convert
-*	returns:
-*		int32_t retInt - integer value converted from ASCII
 **************/
 int32_t my_atoi(int8_t * str){
 	uint8_t i = 0;
@@ -79,32 +67,34 @@ int32_t my_atoi(int8_t * str){
 	int32_t data = 0;
 	uint8_t negFlg = 0;
 	
-		//check for NULL ptr
+	//check for NULL ptr
 	if (str == NULL){
 		//return an error code -1
 		return -1;
 	}
 	
+	//determine length by searching for string end character
 	while (*(str + len) != '\0'){
 		len++;	
 	}
-
+	
+	//if the first character is '-', set a flag to indicate this is a negative value
+	//  and increment our index to skip calculations on the negative sign
 	if (*str == '-'){
-		printf("neg\n");
 		negFlg = 1;
 		i++;
 	}
-		
+	
+	// do math, determine the value of the string as an integer
 	while (i < len){
 		data = data * 10 + *(str+i) - 48 ;
 		i++;
 	}
 	
+	//negate the value if the negative flg was set earlier
 	if (negFlg){
 		data = data * (-1);
 	}
-	
-	//little_to_big32(&data, 1);
 	
 	return data;
 }
