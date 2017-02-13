@@ -5,9 +5,10 @@
 #	- build: builds and links whole project. generates individual .o files, project1 output file, and .map file
 #	- compile-all: builds all files but does not link. generates individual .o files
 #	- clean: removes all .o, .i, .asm, .map files and project1 output file
-#	- *.o: generates individual .o file
-#	- *.i: generates individual .i file
-#	- *.asm: generates individual .asm file
+#	- *.o: generates individual object file
+#	- *.i: generates individual preprocessed output file
+#	- *.asm: generates individual assembly file
+#	- *.dep: generates individual dependency file
 # Platforms: 
 #	- Linux VM host machine native compile (default unless bbb architecture detected)
 #	- Linux VM host machine cross compile for Beaglebone Black
@@ -100,10 +101,11 @@ endif
 
 LDFLAGS= -Wl,-Map=$(TARGET).map
 
-#generate object, preprocessed output, and assembly file lists from sources
+#generate object, preprocessed output, assembly, and dependency file lists from sources
 OBJS:=$(SRCS:.c=.o)
 PRES:=$(SRCS:.c=.i)
 ASMS:=$(SRCS:.c=.asm)
+DEPS:=$(SRCS:.c=.dep)
 
 #targets
 %.o: %.c
@@ -114,6 +116,9 @@ ASMS:=$(SRCS:.c=.asm)
 	
 %.asm: %.c
 	$(CC) -S $^ -o $@ $(CFLAGS)
+
+%.dep: %.c
+	 $(CC) -M $(CFLAGS) -o $@ $<
 		 
 .PHONY: build
 build: $(TARGET)
@@ -128,4 +133,4 @@ $(TARGET): $(OBJS)
 	
 .PHONY: clean
 clean:
-	rm $(TARGET).map $(PRES) $(ASMS) $(OBJS) $(TARGET)
+	rm $(TARGET).map $(PRES) $(ASMS) $(DEPS) $(OBJS) $(TARGET)
