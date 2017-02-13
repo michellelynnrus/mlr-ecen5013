@@ -9,8 +9,14 @@ ARCH = $(shell arch)
 SPECS = nosys.specs
 CC=gcc
 CSTD=c99
-TARGET=main
+TARGET=project1
 PLATFORM_FLAGS= -march=$(CPU)
+
+# TRY THIS
+OS:=$(shell uname -s)
+ifneq ($(OS),Linux)
+	PLATFORM=bbb
+endif
 
 #default platform is host, change CPU and CC if specified otherwise
 ifeq ($(PLATFORM),frdm)
@@ -26,28 +32,28 @@ ifeq ($(PLATFORM),bbb)
 endif
 				
 				
-CFLAGS= $(PLATFORM_FLAGS) -std=$(CSTD)# -g -Wall -Werror -O0
+CFLAGS= $(PLATFORM_FLAGS) -std=$(CSTD) -g -Wall -Werror -O0
 LDFLAGS= -Wl,-Map=$(TARGET).map
 OBJS:=$(SRCS:.c=.o)
-
-
-#
-#OS:=$(shell uname -s)
-#ifeq ($(OS),Linux)
-#	CC=gcc
-#	CPU=native
-#	ARCH=$(shell arch)
-#else 
-#	CC=arm_none_eabi_gcc
-#endif
+PRES:=$(SRCS:.c=.i)
+ASMS:=$(SRCS:.c=.asm)
 
 
 %.o: %.c
 	$(CC) -c $^ -o $@ $(CFLAGS)
-		 
+	
+%.i: %.c
+	$(CC) -E $^ -o $@ $(CFLAGS)
+	
+%.asm: %.c
+	$(CC) -S $^ -o $@ $(CFLAGS)
 		 
 .PHONY: all
-all: main
+all: $(TARGET)
+
+.PHONY: compile-all
+compile-all: $(OBJS)
+	$(CC) $^ $(CFLAGS) $(LDFLAGS) $(INCLUDES) -c -o $@
 
 $(TARGET): $(OBJS)
 	$(CC) $^ $(CFLAGS) $(LDFLAGS) $(INCLUDES) -o $@
@@ -58,4 +64,4 @@ $(TARGET): $(OBJS)
 	
 .PHONY: clean
 clean:
-	rm $(TARGET).map $(OBJS) $(TARGET)
+	rm $(TARGET).map $(PRES) $(ASMS) $(OBJS) $(TARGET)
