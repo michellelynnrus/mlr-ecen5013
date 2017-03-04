@@ -5,6 +5,7 @@
 #include <stdint.h>
 #include "data.h"
 #include "memory.h"
+#include "feature.h"
 
 /**************
 * project_1_report()

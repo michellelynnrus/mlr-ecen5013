@@ -13,7 +13,13 @@ uint8_t * charArrPtr_2 = NULL;
 **************/
 void project_1_report(void){
 	
+	uint16_t tmpArray[10];
+	uint16_t * tmpArrPtr = tmpArray;
+	my_memset(tmpArrPtr, 10, 0xEE);
+	
 	//initializing data sets
+	uint8_t isDuplicate = findDuplicates(tmpArrPtr, 10);
+	
 	
 	uint8_t set_1[32]; //0x0123456789ABCDEF0123456789ABCDEF;
 	setPtr_1 = set_1;

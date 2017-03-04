@@ -32,6 +32,8 @@
 
 include sources.mk
 
+INC = hdr/
+
 #variables can be changed when calling make
 PROJECT = 1
 PLATFORM = host
@@ -80,7 +82,7 @@ ifeq ($(PLATFORM),bbb)
 endif
 				
 #define flags
-CFLAGS= $(PLATFORM_FLAGS) -std=$(CSTD) -D PROJECT=$(PROJECT) -D PLATFORM_CODE=$(PLATFORM_CODE)
+CFLAGS= $(PLATFORM_FLAGS) -std=$(CSTD) -I $(INC) -D PROJECT=$(PROJECT) -D PLATFORM_CODE=$(PLATFORM_CODE)
 
 #add additional flags if requested
 ifeq ($(DEBUG),true)
