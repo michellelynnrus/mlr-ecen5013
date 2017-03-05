@@ -1,5 +1,6 @@
+#include <stdint.h>
+#include <stdlib.h>
 #include "circBuf.h"
-
 
 CB_Status_t CB_AddItem(CB_t * circBuf, uint8_t item){
 	//Check for a null pointer
@@ -17,7 +18,7 @@ CB_Status_t CB_AddItem(CB_t * circBuf, uint8_t item){
 	if (CB_Empty(circBuf) != EMPTY){
 		
 		//If not empty, check boundary condition
-		if ((circBuf->head - circBuf->buffer) >= (length - 1)) {
+		if ((circBuf->head - circBuf->buffer) >= (circBuf->length - 1)) {
 		
 			//If boundary condition (head at end of allocated memory space)
 			circBuf->head = circBuf->buffer;
@@ -48,7 +49,7 @@ CB_Status_t CB_RemoveItem(CB_t * circBuf, uint8_t * item){
 	
 	//If empty, return empty
 	if (CB_Empty(circBuf) == EMPTY){
-		return CB_Empty;
+		return EMPTY;
 	}
 	
 	//If not empty, store data at tail pointer to item pointer
@@ -60,7 +61,7 @@ CB_Status_t CB_RemoveItem(CB_t * circBuf, uint8_t * item){
 	//Check if empty again; don't increment tail if empty
 	if (CB_Empty(circBuf) != EMPTY){
 		//If not empty, check boundary condition
-		if ((circBuf->tail - circBuf->buffer) >= (length - 1)) {
+		if ((circBuf->tail - circBuf->buffer) >= (circBuf->length - 1)) {
 		
 			//If boundary condition (tail at end of allocated memory space)
 			circBuf->tail = circBuf->buffer;
@@ -84,7 +85,7 @@ CB_Status_t CB_Full(CB_t * circBuf){
 	} 
 	
 	//Can I just do this with the count?
-	if (count == length){
+	if (circBuf->count == circBuf->length){
 		return FULL;
 	}
 	
@@ -115,7 +116,7 @@ CB_Status_t CB_Empty(CB_t * circBuf){
 	
 	//Would it also work to use the count?
 
-	if (count == 0){
+	if (circBuf->count == 0){
 		return EMPTY;
 	}
 	

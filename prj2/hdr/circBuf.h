@@ -31,13 +31,13 @@ typedef struct CircBuf {
 *		NULLPTR - Circular buffer pointer is null
 *		UNKNOWN_ERROR - You broke something (may not be used)
 **************/
-typedef enum CB_Status_t {
-	OK;
-	FULL;
-	EMPTY;
-	NULLPTR;
-	UNKNOWN_ERROR;
-}
+typedef enum CircBuf_Status {
+	OK,
+	FULL,
+	EMPTY,
+	NULL_PTR,
+	UNKNOWN_ERROR
+} CB_Status_t;
 
 /**************
 * CB_AddItem()
