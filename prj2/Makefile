@@ -106,9 +106,9 @@ LDFLAGS= -Wl,-Map=$(addprefix $(BLD_PATH)/,$(TARGET).map)
 #generate object, preprocessed output, assembly, and dependency file lists from sources
 SRCS:=$(addprefix $(SRC_PATH)/,$(SRC_FILES))
 OBJS:=$(addprefix $(BLD_PATH)/,$(SRC_FILES:.c=.o))
-PRES:=$(BLD_PATH)/$(SRC_FILES:.c=.i)
-ASMS:=$(BLD_PATH)/$(SRC_FILES:.c=.asm)
-DEPS:=$(BLD_PATH)/$(SRC_FILES:.c=.dep)
+PRES:=$(addprefix $(BLD_PATH)/$(SRC_FILES:.c=.i))
+ASMS:=$(addprefix $(BLD_PATH)/$(SRC_FILES:.c=.asm))
+DEPS:=$(addprefix $(BLD_PATH)/$(SRC_FILES:.c=.dep))
 
 #targets
 $(BLD_PATH)/%.o: $(SRC_PATH)/%.c
