@@ -1,9 +1,0 @@
-/home/michelle/repos/mlr-ecen5013/3rd-party/build-Debug/lib/pkgconfig/cmocka.pc
-/home/michelle/repos/mlr-ecen5013/3rd-party/build-Debug/lib/cmake/cmocka/cmocka-config.cmake
-/home/michelle/repos/mlr-ecen5013/3rd-party/build-Debug/lib/cmake/cmocka/cmocka-config-version.cmake
-/home/michelle/repos/mlr-ecen5013/3rd-party/build-Debug/include/cmocka.h
-/home/michelle/repos/mlr-ecen5013/3rd-party/build-Debug/include/cmocka_pbc.h
-/home/michelle/repos/mlr-ecen5013/3rd-party/build-Debug/lib/libcmocka.so.0.4.0
-/home/michelle/repos/mlr-ecen5013/3rd-party/build-Debug/lib/libcmocka.so.0
-/home/michelle/repos/mlr-ecen5013/3rd-party/build-Debug/lib/libcmocka.so
-/home/michelle/repos/mlr-ecen5013/3rd-party/build-Debug/lib/libcmocka.a
