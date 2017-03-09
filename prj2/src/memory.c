@@ -15,6 +15,7 @@ int8_t my_memmove(uint8_t * src, uint8_t * dst, uint32_t length){
 	}
 	
 	if((src < dst) && (src+length >= dst)){
+		
 		//create a temporary array to hold the data (only if overlapping)
 		//am I allowed to do this with the array...?
 		uint8_t tmpData[length];
@@ -23,12 +24,17 @@ int8_t my_memmove(uint8_t * src, uint8_t * dst, uint32_t length){
 		for(int i = 0; i < length; i++){
 			*(tmpDataPtr + i) = *(src + i);
 		}
-		//src = tmpDataPtr - (length-1);
-	}
 	
-	//Loop through the data copy to new dst address
-	for(uint8_t i = 0; i < length; i++){
-		*(dst+i) = *(src+i);
+		//Loop through the data copy to new dst address
+		for(uint8_t i = 0; i < length; i++){
+			*(dst+i) = *(tmpDataPtr+i);
+		}
+	} else {
+
+		//Loop through the data copy to new dst address
+		for(uint8_t i = 0; i < length; i++){
+			*(dst+i) = *(src+i);
+		}
 	}
 	return 0;
 }

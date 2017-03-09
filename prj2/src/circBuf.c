@@ -1,5 +1,3 @@
-#include <stdint.h>
-#include <stdlib.h>
 #include "circBuf.h"
 
 CB_Status_t CB_AddItem(CB_t * circBuf, uint8_t item){
@@ -74,7 +72,7 @@ CB_Status_t CB_RemoveItem(CB_t * circBuf, uint8_t * item){
 		}
 	}
 	
-	return UNKNOWN_ERROR;
+	return OK;
 }
 
 
@@ -138,20 +136,17 @@ CB_Status_t CB_Peek(CB_t * circBuf, uint16_t index, uint8_t * data){
 }
 
 
-CB_Status_t CB_Allocate(CB_t * circBuf, uint16_t length){
-	//Check for a null pointer
-	if (!circBuf) {
-		return NULL_PTR;
-	} 
+CB_Status_t CB_Allocate(CB_t ** circBuf, uint16_t length){
 	
 	//allocate length bytes in memory
-	circBuf = (CB_t *) malloc(length);
-	
+	*circBuf = (CB_t *) malloc(sizeof(CB_t));
+	(*circBuf)->buffer = (uint8_t *) malloc(length);
+		
 	//initialize CB_t fields
-	circBuf->head = circBuf->buffer;
-	circBuf->tail = circBuf->buffer;
-	circBuf->length = length;
-	circBuf->count = 0;
+	(*circBuf)->head = (*circBuf)->buffer;
+	(*circBuf)->tail = (*circBuf)->buffer;
+	(*circBuf)->length = length;
+	(*circBuf)->count = 0;
 	
 	return OK;
 }
@@ -165,6 +160,9 @@ CB_Status_t CB_Destroy(CB_t * circBuf){
 	
 	//free memory in buffer pointer
 	free(circBuf->buffer);
+	
+	//free buffer memory
+	free(circBuf);
 	
 	//clear CB_t fields
 	circBuf->head = circBuf->buffer;

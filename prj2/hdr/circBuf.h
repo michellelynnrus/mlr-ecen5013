@@ -1,6 +1,9 @@
 #ifndef __circBuf_h__
 #define __circBuf_h__
 
+#include <stdint.h>
+#include <stdlib.h>
+
 /**************
 * typedef struct CB_t
 *	description: 
@@ -110,7 +113,7 @@ CB_Status_t CB_Peek(CB_t * circBuf, uint16_t index, uint8_t * value);
 *	returns:
 *		CB_Status_t status - 
 **************/
-CB_Status_t CB_Allocate(CB_t * circBuf, uint16_t length);
+CB_Status_t CB_Allocate(CB_t ** circBuf, uint16_t length);
 
 /**************
 * bufDestroy()

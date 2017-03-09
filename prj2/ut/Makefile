@@ -6,13 +6,15 @@ CFLAGS = -std=c99 -Wall -g -O0
 #
 SUBDIRS = ../../3rd-party
 
+TEST = circBuf
+
+
 ifdef SUBDIRS
 .PHONY : $(SUBDIRS)
 $(SUBDIRS) : 
 	$(MAKE) --no-print-directory --directory=$@ \
 		CC=$(CC) CFLAGS="$(CFLAGS)" $(MAKECMDGOALS)
 endif
-
 
 THIRD_PARTY_DIR = ../../3rd-party
 CMOCKA_INCLUDE_DIR = $(THIRD_PARTY_DIR)/build-Debug/include
@@ -31,7 +33,9 @@ CFLAGS += -I $(CMOCKA_INCLUDE_DIR)
 # library
 #
 LIB_SRCS = \
-	../src/memory.c 
+	../src/memory.c \
+	../src/data.c \
+	../src/circBuf.c
 
 LIB_OBJS = $(LIB_SRCS:%.c=%.o)
 
@@ -50,12 +54,12 @@ EXE = main.out
 #
 # tests
 #
-TEST_MEMORY_SRCS = \
-	src/test_memory.c
+TEST_SRCS = \
+	$(addsuffix .c, $(addprefix src/test_, $(TEST)))
 
-TEST_MEMORY_OBJS = $(TEST_MEMORY_SRCS:%.c=%.o)
+TEST_DATA_OBJS = $(TEST_SRCS:%.c=%.o)
 
-TEST_MEMORY_EXE = test-memory.out
+TEST_EXE = $(addsuffix .out, $(addprefix src/test_, $(TEST)))
 
 
 #
@@ -72,16 +76,16 @@ all : $(LIB) $(EXE)
 $(EXE) : $(EXE_OBJS) $(LIB)
 	$(CC) $(CFLAGS) -o $@ $^ -lm
 
-test : $(TEST_MEMORY_EXE)
-	./$(TEST_MEMORY_EXE)
+test : $(TEST_EXE)
+	./$(TEST_EXE)
 
-$(TEST_MEMORY_EXE) : $(TEST_MEMORY_SRCS) $(LIB)
+$(TEST_EXE) : $(TEST_SRCS) $(LIB)
 	$(CC) $(CFLAGS) -I ../hdr -I hdr -o $@ $^ $(CMOCKA_LIBRARY) -lm
 
 
 .PHONY : clean
 clean : FORCE
-	-rm -rf *~ *.o $(LIB) $(EXE) $(TEST_MEMORY_EXE) *.dSYM/
+	-rm -rf *~ *.o $(LIB) $(EXE) $(TEST_EXE) *.dSYM/
 
 .PHONY : clobber
 clobber : $(SUBDIRS) clean
