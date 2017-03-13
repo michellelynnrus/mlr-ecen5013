@@ -135,7 +135,10 @@ UART_Status_t uart_receive_byte(uint8_t * byte){
 		} else if (bufStat != CB_EMPTY) {
 			//not OK, not EMPTY, handle this error, probably
 			uartStat = UART_BUF_ERR;
-		} // do nothing if empty
+		} else {
+			// do nothing if empty
+			uartStat = UART_NODATA;
+		}
 
 #else
 		//Poll the RDRF flag

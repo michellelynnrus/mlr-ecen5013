@@ -10,6 +10,7 @@ typedef enum {
 	UART_OK,
 	UART_NULLPTR,
 	UART_BUF_ERR,
+	UART_NODATA,
 	UART_OTHER_ERR
 } UART_Status_t;
 
