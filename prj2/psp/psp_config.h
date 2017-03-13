@@ -12,4 +12,7 @@
 #define DEBUG_MODE
 //#undef DEBUG_MODE
 
+#define UART_INT
+//#undef UART_INT
+
 #endif /* __PSP_CONFIG_H__ */

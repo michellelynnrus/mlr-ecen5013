@@ -45,17 +45,17 @@ void log_integer(uint8_t integer){
 }
 
 void log_flush(void){
+
+//#ifndef UART_INT
 	while (CB_Empty(p_log_TXbuf) != CB_EMPTY){
-#ifndef UART_INT
 		// if we are using polling implementation, need to send the data out now
 		// otherwise the interrupt should be doing that for us?
 		uint8_t item;
 		CB_RemoveItem(p_log_TXbuf, &item);
 		uart_send_byte(item);
-#endif
-		// otherwise the interrupt should be doing that for us so just wait
-
 	}
+//#endif
+		// otherwise the interrupt should be doing that for us so just wait
 
 
 }
