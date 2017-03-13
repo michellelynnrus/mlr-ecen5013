@@ -1,5 +1,5 @@
-#ifndef __circBuf_h__
-#define __circBuf_h__
+#ifndef __CIRCBUF_H__
+#define __CIRCBUF_H__
 
 #include <stdint.h>
 #include <stdlib.h>
@@ -17,10 +17,10 @@
 **************/
 typedef struct CircBuf {
 	uint8_t * buffer;
-	uint8_t * head;
-	uint8_t * tail;
+	volatile uint8_t * head;
+	volatile uint8_t * tail;
 	uint16_t length;
-	uint16_t count;
+	volatile uint16_t count;
 } CB_t;
 
 /**************
@@ -35,11 +35,12 @@ typedef struct CircBuf {
 *		UNKNOWN_ERROR - You broke something (may not be used)
 **************/
 typedef enum CircBuf_Status {
-	OK,
-	FULL,
-	EMPTY,
-	NULL_PTR,
-	UNKNOWN_ERROR
+	CB_OK,
+	CB_FULL,
+	CB_EMPTY,
+	CB_NULL_PTR,
+	CB_MALLOC_ERR,
+	CB_UNKNOWN_ERROR
 } CB_Status_t;
 
 /**************
@@ -98,7 +99,7 @@ CB_Status_t CB_Empty(CB_t * circBuf);
 *		uint16_t index - item index to peek at, offset from last added item (tail)
 *		uint8_t * value - pointer to value to return
 *	returns:
-*		CB_Status_t status - 
+*		CB_Status_t status - enumeration with the state of the buffer
 **************/
 CB_Status_t CB_Peek(CB_t * circBuf, uint16_t index, uint8_t * value);
 
@@ -108,21 +109,21 @@ CB_Status_t CB_Peek(CB_t * circBuf, uint16_t index, uint8_t * value);
 *		Allocates a circular buffer structure and the buffer 
 *		portion in memory (on the heap) given a number of bytes
 *	params:
-*		CB_t * circBuf - circular buffer pointer
+*		CB_t ** circBuf - pointer to circular buffer pointer
 *		uint16_t length - length of bytes to allocate to buffer
 *	returns:
-*		CB_Status_t status - 
+*		CB_Status_t status - enumeration with the state of the buffer
 **************/
 CB_Status_t CB_Allocate(CB_t ** circBuf, uint16_t length);
 
 /**************
-* bufDestroy()
+* CB_Destroy()
 *	description: 
 *		Frees the circular buffer from dynamic memory
 *	params:
 *		CB_t * circBuf - circular buffer pointer
 *	returns:
-*		CB_Status_t status - 
+*		CB_Status_t status - enumeration with the state of the buffer
 **************/
 CB_Status_t CB_Destroy(CB_t * circBuf);
 

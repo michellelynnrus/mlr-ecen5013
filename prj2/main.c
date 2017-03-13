@@ -3,6 +3,8 @@
 #include "project_1.h"
 #include "project_2.h"
 
+#define PROJECT 2
+
 int main(void){
 	
 #if (PROJECT==1)

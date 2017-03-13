@@ -1,6 +1,11 @@
 #ifndef __PROJECT_2_H__
 #define __PROJECT_2_H__
 
+#include "psp_config.h"
+#include "psp_macros_log.h"
+#include "psp_macros_sys.h"
+#include "binLog.h"
+
 /**************
 * project_2_report()
 *
