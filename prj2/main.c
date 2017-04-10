@@ -2,8 +2,9 @@
 #include "memory.h"
 #include "project_1.h"
 #include "project_2.h"
+#include "project_3.h"
 
-#define PROJECT 2
+#define PROJECT 3
 
 int main(void){
 	
@@ -12,6 +13,8 @@ int main(void){
 	project_1_report();
 #elif (PROJECT==2)
 	project_2_report();
+#elif (PROJECT==3)
+	project_3_report();
 #else
 	//Future projects go here
 	//Compile time switch can be defined as 2, 3, etc to specify different projects

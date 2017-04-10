@@ -15,4 +15,8 @@
 #define UART_INT
 //#undef UART_INT
 
+#if PLATFORM_CODE == PLATFORM_KL25Z
+#include "psp_kl25z.h"
+#endif
+
 #endif /* __PSP_CONFIG_H__ */

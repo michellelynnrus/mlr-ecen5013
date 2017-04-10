@@ -26,6 +26,12 @@ void project_2_report(void){
     	//Wait for rx
     	status = uart_receive_byte(&byte);
 
+    	if (byte == 0x6E){
+    		GPIOD_PDOR = 0x02;
+    	} else if (byte == 0x66){
+    		GPIOD_PDOR = 0x00;
+    	}
+
     	if (status == UART_OK){
     		if ((byte >= 65 && byte <= 90) || (byte >= 97 && byte <= 122)){
     			//A-Z or a-z
