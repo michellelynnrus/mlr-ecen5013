@@ -32,10 +32,14 @@
 
 include sources.mk
 
-INC = $(HDR_PATH)/
+INC = $(LIB_HDR_PATH)\
+	$(PSP_HDR_PATH)\
+	$(PRJ_HDR_PATH)
+	
+HDR_DEPS = $(addprefix $(PSP_HDR_PATH)/,$(PSP_HDR_FILES))
 
 #variables can be changed when calling make
-PROJECT = 2
+PROJECT = 3
 PLATFORM = host
 DEBUG = false
 WALL = false
@@ -79,10 +83,13 @@ ifeq ($(PLATFORM),bbb)
 	PLATFORM_FLAGS=-mcpu=$(CPU) -mthumb
 	PLATFORM_CODE=1
 	SIZE=arm-linux-gnueabihf-size
+	PSP_SRCS:=$(addprefix $(PSP_KL25Z_PATH)/,$(PSP_KL25Z_SRC_FILES))
+	INC+=$(PSP_HDR_PATH_KL25Z)
 endif
 				
 #define flags
-CFLAGS= $(PLATFORM_FLAGS) -std=$(CSTD) -I $(INC) -D PROJECT=$(PROJECT) -D PLATFORM_CODE=$(PLATFORM_CODE)
+CFLAGS= $(PLATFORM_FLAGS) -std=$(CSTD) -D PROJECT=$(PROJECT) -D PLATFORM_CODE=$(PLATFORM_CODE)
+#removed from cflags for now -I $(INC) 
 
 #add additional flags if requested
 ifeq ($(DEBUG),true)
@@ -104,36 +111,50 @@ endif
 LDFLAGS= -Wl,-Map=$(addprefix $(BLD_PATH)/,$(TARGET).map)
 
 #generate object, preprocessed output, assembly, and dependency file lists from sources
-SRCS:=$(addprefix $(SRC_PATH)/,$(SRC_FILES))
-OBJS:=$(addprefix $(BLD_PATH)/,$(SRC_FILES:.c=.o))
-PRES:=$(addprefix $(BLD_PATH)/$(SRC_FILES:.c=.i))
-ASMS:=$(addprefix $(BLD_PATH)/$(SRC_FILES:.c=.asm))
-DEPS:=$(addprefix $(BLD_PATH)/$(SRC_FILES:.c=.dep))
+LIB_SRCS:=$(addprefix $(LIB_PATH)/,$(LIB_SRC_FILES))
+PSP_SRCS+=$(addprefix $(PSP_PATH)/,$(PSP_SRC_FILES))
+PRJ_SRCS:=$(addprefix $(PRJ_PATH)/,$(PRJ_SRC_FILES))
 
-#targets
-$(BLD_PATH)/%.o: $(SRC_PATH)/%.c
-	$(CC) -c $(CFLAGS) $(LDFLAGS) -o $@ $<
+SRC_FILES:=$(LIB_SRC_FILES) $(PSP_SRC_FILES) $(PRJ_SRC_FILES) $(MAIN_SRC_FILES)
+
+SRCS:= $(LIB_SRCS) $(PSP_SRCS) $(PRJ_SRCS) $(MAIN_SRCS)
+
+LIB_OBJS:=$(LIB_SRC_FILES:.c=.o)
+PSP_OBJS:=$(PSP_SRC_FILES:.c=.o)
+PRJ_OBJS:=$(PRJ_SRC_FILES:.c=.o)
+MAIN_OBJS:=$(MAIN_SRC_FILES:.c=.o)
+
+OBJS:=$(LIB_OBJS) $(PSP_OBJS) $(PRJ_OBJS) $(MAIN_OBJS)
+
+VPATH = lib:lib/hdr:prj:psp:psp/kl25z/hdr
+
+$(BLD_PATH)/%.o: %.c | build_dir
+	$(CC) -c $(CFLAGS) $(addprefix -I ,$(INC)) $< -o $@
 	
 $(BLD_PATH)/%.i: $(SRC_PATH)/%.c
-	$(CC) -E $(CFLAGS) $(LDFLAGS) -o $@ $<
+	$(CC) -E $(CFLAGS) $(LDFLAGS) -o $@ $^
 	
 $(BLD_PATH)/%.asm: $(SRC_PATH)/%.c
-	$(CC) -S $(CFLAGS) $(LDFLAGS) -o $@ $<
+	$(CC) -S $(CFLAGS) $(LDFLAGS) -o $@ $^
 
 $(BLD_PATH)/%.dep: $(SRC_PATH)/%.c
-	 $(CC) -M $(CFLAGS) $(LDFLAGS) -o $@ $<
+	 $(CC) -M $(CFLAGS) $(LDFLAGS) -o $@ $^
 		 
 .PHONY: build
 build: $(TARGET)
 
 .PHONY: compile-all
-compile-all: $(OBJS)
-	$(CC) $(INCLUDES) -c -o $@ $<
+compile-all: $(addprefix $(BLD_PATH)/,$(OBJS))
 
-$(TARGET): $(OBJS)
-	$(CC) $(CFLAGS) $(LDFLAGS) $(INCLUDES) -o $@ $^
+$(TARGET): $(addprefix $(BLD_PATH)/,$(OBJS))
+	$(CC) $(CFLAGS) $(LDFLAGS) -o $@  $^
 	$(SIZE) $(TARGET)
-	
+
+.PHONY: build_dir
+build_dir:
+	mkdir -p $(BLD_PATH) 
+
 .PHONY: clean
 clean:
-	rm -f project* $(BLD_PATH)/*.map $(PRES) $(ASMS) $(DEPS) $(OBJS) $(TARGET)
+	rm -f project* $(BLD_PATH)/*.map $(addprefix $(BLD_PATH)/,$(OBJS)) $(PRES) $(ASMS) $(DEPS) $(TARGET) 
+	rmdir $(BLD_PATH) 
