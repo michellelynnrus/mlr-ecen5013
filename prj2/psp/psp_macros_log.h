@@ -22,9 +22,11 @@
 
 #else
 
+#include <stdio.h>
+
 // LOGGING FUNCTIONS FOR LINUX AND BBB IN DEBUG MODE
 #define LOG_INIT()
-#define LOG_RAW_DATA(data, length) 	printf(data)
+#define LOG_RAW_DATA(data, length) 	printf("%s", (char*)data)
 #define LOG_RAW_STRING(string) 		printf(string)
 #define LOG_RAW_INT(integer)		printf("%d", i)
 #define LOG_FLUSH()

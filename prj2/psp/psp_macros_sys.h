@@ -18,7 +18,10 @@
 #else
 
 #define SYS_INIT()
+#define DMA_MOVE(src, dst, length, size)
 
+#define COUNTER_INIT()
+#define COUNTER_GET_COUNT()
 #endif
 
 #endif /* __PSP_MACROS_SYS_H__ */

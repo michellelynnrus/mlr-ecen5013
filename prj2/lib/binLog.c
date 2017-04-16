@@ -1,4 +1,5 @@
 #include "binLog.h"
+#include <stdlib.h>
 #include "psp_macros_log.h"
 #include "memory.h"
 

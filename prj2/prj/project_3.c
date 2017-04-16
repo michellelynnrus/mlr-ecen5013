@@ -20,6 +20,9 @@ void project_3_report(void){
 	SYS_INIT();
 	COUNTER_INIT();
 
+
+
+#if PLATFORM_CODE == PLATFORM_KL25Z
 	//setup stuff to test interrupt latency
 	__enable_irq();
 	NVIC_EnableIRQ(PORTA_IRQn);
@@ -27,7 +30,7 @@ void project_3_report(void){
 
     //while (1){
 
-#if PLATFORM_CODE == PLATFORM_KL25Z
+
     //don't do this for any other platform (they don't have equivalent RX functions)
 	//GPIOB_PTOR = (1 << 18);
 	LOG_ITEM(DATA_ANALYSIS_COMPLETED, (uint8_t *)&dstData, sizeof(uint32_t)*2);
@@ -51,8 +54,10 @@ void project_3_report(void){
 	
 }
 
+#if PLATFORM_CODE == PLATFORM_KL25Z
 extern void PORTA_IRQHandler(){
 	uint32_t intEndTime = COUNTER_GET_COUNT();
 	LOG_ITEM(DATA_NUMERIC_COUNT, (uint8_t *)&intEndTime, sizeof(uint32_t));
 	PORTA_PCR13 |= PORT_PCR_ISF_MASK;
 }
+#endif
