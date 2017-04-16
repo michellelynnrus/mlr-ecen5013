@@ -19,8 +19,8 @@ PRJ_PATH = prj
 PRJ_HDR_PATH = prj/hdr
 PRJ_SRC_FILES=\
 	project_1.c\
-	project_2.c#\
-	#project_3.c
+	project_2.c\
+	project_3.c
 
 ### psp
 PSP_PATH = psp
