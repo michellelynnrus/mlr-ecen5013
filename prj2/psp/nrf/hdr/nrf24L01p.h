@@ -1,0 +1,10 @@
+#ifndef __NRF24L01P_H__
+#define __NRF24L01P_H__
+
+
+// DEFINE REGISTER ACCESS MACROS HERE
+
+
+
+
+#endif /*__NRF24L01P_H__*/

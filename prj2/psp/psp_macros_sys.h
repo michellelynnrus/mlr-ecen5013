@@ -3,6 +3,7 @@
 
 #include "psp_config.h"
 
+#define NOT_SUPPORTED (-1)
 
 #if (PLATFORM_CODE==PLATFORM_KL25Z)
 
@@ -18,7 +19,7 @@
 #else
 
 #define SYS_INIT()
-#define DMA_MOVE(src, dst, length, size)
+#define DMA_MOVE(src, dst, length, size)	NOT_SUPPORTED
 
 #define COUNTER_INIT()
 #define COUNTER_GET_COUNT()

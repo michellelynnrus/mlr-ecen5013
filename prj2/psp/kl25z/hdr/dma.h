@@ -24,7 +24,7 @@
 *	returns:
 *		int8_t status - returns 0 if init was successful, -1 if unsuccessful
 **************/
-int32_t dma0_move(uint8_t * src, uint8_t * dst, uint32_t length, uint8_t size);
+int8_t dma0_move(uint8_t * src, uint8_t * dst, uint32_t length, uint8_t size);
 
 
 #endif /*__DMA_H__*/

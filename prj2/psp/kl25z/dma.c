@@ -40,7 +40,7 @@
 /**************
 * dma0_move()
 **************/
-int32_t dma0_move(uint8_t * src, uint8_t * dst, uint32_t length, uint8_t size){
+int8_t dma0_move(uint8_t * src, uint8_t * dst, uint32_t length, uint8_t size){
 	//currently only supports both ssize and dsize the same
 
 	// Set source address register DMA_SAR0
@@ -54,6 +54,20 @@ int32_t dma0_move(uint8_t * src, uint8_t * dst, uint32_t length, uint8_t size){
 
 	// Set source/destination size? SSIZE/DSIZE, DMA_DCR0 register
 	// Source/dest increment? SINC/DINC, DMA_DCR0
+	uint8_t sizeBits;
+		switch (size) {
+		case 32:
+			sizeBits = 0x00;
+			break;
+		case 8:
+			sizeBits = 0x01;
+			break;
+		case 16:
+			sizeBits = 0x10;
+			break;
+		default:
+			return -1; // invalid size
+		}
 	DMA_DCR0 = (DMA_DCR_SSIZE(size) | DMA_DCR_DSIZE(size));
 	DMA_DCR0 |= (DMA_DCR_SINC_MASK | DMA_DCR_DINC_MASK);
 

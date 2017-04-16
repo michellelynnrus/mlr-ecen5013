@@ -2,9 +2,6 @@
 
 #include <stdio.h>
 
-
-#ifdef DMA_SUPPORTED
-
 /**************
 * memmove_dma()
 **************/
@@ -24,14 +21,11 @@ int8_t memset_dma(uint8_t * src, uint32_t length, uint8_t value){
 
 	//DMA transfer (1 byte size)
 	for (int8_t i = 0; i < length; i++){
-		dma_status = DMA_MOVE(&value, src+i, 1, 0x01);
+		dma_status = DMA_MOVE(&value, src+i, 1, 8);
 	}
 
 	return dma_status;
 }
-
-#endif
-
 
 
 /**************
