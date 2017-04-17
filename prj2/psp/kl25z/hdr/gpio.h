@@ -5,8 +5,8 @@
 #include "MKL25Z4.h"
 
 typedef enum {
-	OK = 1,
-	ERROR = 2,
+	GPIO_OK = 1,
+	GPIO_ERROR = 2,
 } GPIO_status_t;
 
 

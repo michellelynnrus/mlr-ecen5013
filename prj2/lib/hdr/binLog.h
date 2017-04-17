@@ -23,7 +23,14 @@ typedef enum {
 	DATA_NUMERIC_COUNT = 10,	 //logs number of numeric characters
 	DATA_PUNCTUATION_COUNT = 11, //logs number of punctuation characters
 	DATA_MISC_COUNT = 12,		 //logs number of misc characters
-	DATA_ANALYSIS_COMPLETED = 13 //no payload
+	DATA_ANALYSIS_COMPLETED = 13, //no payload
+	PROFILE_MEMMOVE_START = 14,	//no payload
+	PROFILE_MEMSET_START = 15,	//no payload
+	PROFILE_NUM_BYTES = 16,		//number of bytes to start profiling
+	PROFILE_MEM_STD = 17,		//profile time
+	PROFILE_MEM_CUSTOM = 18,	//profile time
+	PROFILE_MEM_DMA = 19,		//profile time
+	DMA_NO_SUPPORT = 20			//no payload
 } LOG_ID_t;
 
 /*

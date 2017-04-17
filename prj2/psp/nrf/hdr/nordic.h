@@ -4,6 +4,43 @@
 #include <stdint.h>
 #include <nrf24L01p.h>
 
+
+
+/*
+When interacting with the chip you will have to enable the chip select connection.
+This will need to be enabled starting at any packet transaction, and disabled at
+the end. You should also create the following functions as short as possible with
+the use of inlines or macros. These will need to interact with the GPIO library.
+
+	Inline or macro functions:
+	nrf_chip_enable()
+	nrf_chip_dissable()
+	nrf_transmit_enable()
+	nrf_transmit_disable()
+
+
+The nordic library should also define many of the constants that are needed
+for the NRF device. This should include all of the registers in the register
+map, all of the commands, and any configuration values for bitwise manipulation
+for the associated registers you are to read/write. This means all of the
+bitwise data for the following registers:
+	STATUS
+	CONFIG
+	RF_SETUP
+	RF_CH
+	FIFO_STATUS
+
+The NRF data sheet will provide all of the interface information.
+Some example registers and bit masks are provided:
+	#define NRF_STATUS_REG (0x00)
+	#define NRF_TXADDR_REG (0x10)
+	#define NRF_POWER_UP (1)
+	#define NRF_POWER_DOWN (0)
+	#define NRF_POWER_UP_MASK (0x02)
+
+*/
+
+
 /**************
 * nrf_read_register()
 *	description:
@@ -13,7 +50,7 @@
 *	returns:
 *		uint8_t regValue - value of the register that was read
 **************/
-uint8_t nrf_read_register(uint8_t register); 
+uint8_t nrf_read_register(uint8_t reg);
 
 /**************
 * nrf_write_register()
@@ -25,7 +62,7 @@ uint8_t nrf_read_register(uint8_t register);
 *	returns:
 *		
 **************/
-void nrf_write_register(uint8_t register, uint8_t value); 
+void nrf_write_register(uint8_t reg, uint8_t value);
 
 /**************
 * nrf_read_status()
@@ -83,6 +120,18 @@ uint8_t nrf_read_rf_setup(void);
 *		
 **************/
 void nrf_write_rf_setup(uint8_t config);
+
+
+/**************
+* nrf_read_rf_ch()
+*	description:
+*		Reads NRF_RF_CH register
+*	params:
+*
+*	returns:
+*		uint8_t regValue - value of the NRF_RF_CH register
+**************/
+uint8_t nrf_read_rf_ch(void);
 
 
 /**************
