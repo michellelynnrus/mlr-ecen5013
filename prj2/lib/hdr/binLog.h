@@ -106,6 +106,8 @@ binLog_Status_t binLog_Send(LOG_t * log);
 **************/
 binLog_Status_t binLog_DestroyItem(LOG_t *log);
 
+binLog_Status_t binLog_LogItem_Ascii(LOG_ID_t logID, uint8_t * payload);//, uint16_t data);
 
+binLog_Status_t binLog_Send_Ascii(LOG_t * log);
 
 #endif /* __BINLOG_H__*/

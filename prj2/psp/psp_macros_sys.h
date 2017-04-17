@@ -3,11 +3,15 @@
 
 #include "psp_config.h"
 
+
 #define NOT_SUPPORTED (-1)
 
 #if (PLATFORM_CODE==PLATFORM_KL25Z)
 
 //#include "psp_kl25z.h"
+
+#define START_CRITICAL()					__disable_irq()
+#define END_CRITICAL()						__enable_irq()
 
 #define SYS_INIT() 							sys_init_kl25z()
 

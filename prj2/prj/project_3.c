@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "project_3.h"
 #include "memory.h"
+#include <string.h>
 
 #if (PLATFORM_CODE == PLATFORM_KL25Z)
 #include "spi.h"
@@ -20,80 +21,79 @@ void project_3_report(void){
 	COUNTER_INIT();
 
 	// initialize data for memmove/memset tests
-	uint8_t numBytesToTest[] = {10, 100, 1000, 5000};
-	uint8_t patterns[] = {0xAA, 0x55, 0xFF, 0x00};
-	uint8_t data1 [MAX_BYTES_TO_TEST]; //will be 0xAA for memmove
-	uint8_t data2 [MAX_BYTES_TO_TEST]; //will be 0x55 for memmove
-	uint8_t data3 [MAX_BYTES_TO_TEST]; //will be 0xFF for memmove
-	uint8_t movDestData [MAX_BYTES_TO_TEST]; //will alternate between 0xAA and 0x55 for memmove
-	uint8_t bytes = 0;
-	uint8_t pattern = 0;
+	uint32_t numBytesToTest[] = {10, 100, 1000, 5000};
+	uint8_t data1 [MAX_BYTES_TO_TEST];
+	uint8_t data2 [MAX_BYTES_TO_TEST];
 
+	uint16_t bytes = 0;
+	/**
+	 * PART 1 - PROOF THAT DMA MEMMOVE/MEMSET FUNCTIONS WORK
+	 */
+
+	/**
+	 * PART 2 - PROFILER STUFF
+	 */
 	// initialize profiler variables
 	uint16_t startTime = 0;
 	uint16_t elapsedTime = 0;
 
-	LOG_ITEM(PROFILE_MEMSET_START, 0, 0);
+	LOG_ITEM(PROFILE_MEMSET_START, NO_PAYLOAD, NO_PAYLOAD);
 
-	for(uint8_t i = 0; i < 4; i++){
+	for(uint8_t i = 1; i < 4; i++){
 		bytes = numBytesToTest[i];
-		pattern = patterns[i];
 
-		LOG_ITEM(PROFILE_NUM_BYTES, (uint8_t *)&bytes, sizeof(bytes));
-
-		startTime = COUNTER_GET_COUNT();
-		memset((uint8_t *)&data1, bytes, pattern);
-		elapsedTime = COUNTER_GET_COUNT() - startTime;
-		LOG_ITEM(PROFILE_MEM_STD, (uint8_t *)&elapsedTime, sizeof(elapsedTime));
+		LOG_ITEM(PROFILE_NUM_BYTES, &bytes, sizeof(bytes));
 
 		startTime = COUNTER_GET_COUNT();
-		my_memset((uint8_t *)&data2, bytes, pattern);
+		memset((void *)&data1, 0xAA, bytes);
 		elapsedTime = COUNTER_GET_COUNT() - startTime;
-		LOG_ITEM(PROFILE_MEM_CUSTOM, (uint8_t *)&elapsedTime, sizeof(elapsedTime));
+		LOG_ITEM(PROFILE_MEM_STD, &elapsedTime, sizeof(elapsedTime));
+
+		startTime = COUNTER_GET_COUNT();
+		my_memset((uint8_t *)&data2, bytes, 0x55);
+		elapsedTime = COUNTER_GET_COUNT() - startTime;
+		LOG_ITEM(PROFILE_MEM_CUSTOM, &elapsedTime, sizeof(elapsedTime));
 
 		startTime = COUNTER_GET_COUNT();
 		//note- this will return -1 if not supported for given platform
-		int8_t dmaStatus = memset_dma((uint8_t *)&data3, bytes, pattern);
+		int8_t dmaStatus = memset_dma((uint8_t *)&data1, bytes, 0xFF);
 		elapsedTime = COUNTER_GET_COUNT() - startTime;
 		if (dmaStatus < 0){
-			LOG_ITEM(DMA_NO_SUPPORT, 0, 0);
+			LOG_ITEM(DMA_NO_SUPPORT, NO_PAYLOAD, NO_PAYLOAD);
 		} else {
-			LOG_ITEM(PROFILE_MEM_STD, (uint8_t *)&elapsedTime, sizeof(elapsedTime));
+			LOG_ITEM(PROFILE_MEM_DMA, &elapsedTime, sizeof(elapsedTime));
 		}
 	}
 
 	//don't profile this, just set the memory to alternating values/clear
-	memset((uint8_t *)&data1, MAX_BYTES_TO_TEST, patterns[0]); // all 0xAA
-	memset((uint8_t *)&data2, MAX_BYTES_TO_TEST, patterns[1]); // all 0x55
-	memset((uint8_t *)&data3, MAX_BYTES_TO_TEST, patterns[2]); // all 0xFF
-	memset((uint8_t *)&movDestData, MAX_BYTES_TO_TEST, patterns[3]); // all 0x00
+	memset((void *)&data1, 0xAA, MAX_BYTES_TO_TEST); // all 0xAA
+	memset((void *)&data2, 0x00, MAX_BYTES_TO_TEST); // all 0x00
 
-	LOG_ITEM(PROFILE_MEMMOVE_START, 0, 0);
+	LOG_ITEM(PROFILE_MEMMOVE_START, NO_PAYLOAD, NO_PAYLOAD);
 
 	for(uint8_t i = 0; i < 4; i++){
 		bytes = numBytesToTest[i];
-		pattern = patterns[i];
 
-		LOG_ITEM(PROFILE_NUM_BYTES, (uint8_t *)&bytes, sizeof(bytes));
-
-		startTime = COUNTER_GET_COUNT();
-		memmove((uint8_t *)&data1, (uint8_t *)&movDestData, bytes);
-		elapsedTime = COUNTER_GET_COUNT() - startTime;
-		LOG_ITEM(PROFILE_MEM_STD, (uint8_t *)&elapsedTime, sizeof(elapsedTime));
+		LOG_ITEM(PROFILE_NUM_BYTES, &bytes, sizeof(bytes));
 
 		startTime = COUNTER_GET_COUNT();
-		my_memset((uint8_t *)&data2, (uint8_t *)&movDestData, bytes);
+		memmove((uint8_t *)&data1, (uint8_t *)&data2, bytes);
 		elapsedTime = COUNTER_GET_COUNT() - startTime;
-		LOG_ITEM(PROFILE_MEM_CUSTOM, (uint8_t *)&elapsedTime, sizeof(elapsedTime));
+		LOG_ITEM(PROFILE_MEM_STD, &elapsedTime, sizeof(elapsedTime));
+
+		startTime = COUNTER_GET_COUNT();
+		my_memmove((uint8_t *)&data2, (uint8_t *)&data1, bytes);
+		elapsedTime = COUNTER_GET_COUNT() - startTime;
+		LOG_ITEM(PROFILE_MEM_CUSTOM, &elapsedTime, sizeof(elapsedTime));
 
 		startTime = COUNTER_GET_COUNT();
 		//note- this will return -1 if not supported for given platform
-		int8_t dmaStatus = memset_dma((uint8_t *)&data3, (uint8_t *)&movDestData, bytes);
+		int8_t dmaStatus = memmove_dma((uint8_t *)&data1, (uint8_t *)&data2, bytes, sizeof(uint8_t));
 		elapsedTime = COUNTER_GET_COUNT() - startTime;
 		if (dmaStatus < 0){
-			LOG_ITEM(DMA_NO_SUPPORT, 0, 0);
+			LOG_ITEM(DMA_NO_SUPPORT, NO_PAYLOAD, NO_PAYLOAD);
 		} else {
-			LOG_ITEM(PROFILE_MEM_STD, (uint8_t *)&elapsedTime, sizeof(elapsedTime));
+			LOG_ITEM(PROFILE_MEM_DMA, &elapsedTime, sizeof(elapsedTime));
 		}
 	}
 

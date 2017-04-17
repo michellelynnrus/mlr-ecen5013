@@ -39,7 +39,7 @@ CB_Status_t CB_AddItem(CB_t * circBuf, uint8_t item){
 }
 
 
-CB_Status_t CB_RemoveItem(CB_t * circBuf, uint8_t * item){
+INLINE_FUNC CB_Status_t CB_RemoveItem(CB_t * circBuf, uint8_t * item){
 	//Check for a null pointer
 	if (!circBuf) {
 		return CB_NULL_PTR;
@@ -76,7 +76,7 @@ CB_Status_t CB_RemoveItem(CB_t * circBuf, uint8_t * item){
 }
 
 
-CB_Status_t CB_Full(CB_t * circBuf){
+INLINE_FUNC CB_Status_t CB_Full(CB_t * circBuf){
 	//Check for a null pointer
 	if (!circBuf) {
 		return CB_NULL_PTR;

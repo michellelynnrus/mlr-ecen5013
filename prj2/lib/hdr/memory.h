@@ -4,7 +4,6 @@
 #include <stdint.h>
 #include "psp_config.h"
 
-#ifdef DMA_SUPPORTED
 
 #include "psp_macros_sys.h"
 
@@ -38,8 +37,6 @@ int8_t memmove_dma(uint8_t * src, uint8_t * dst, uint32_t length, uint8_t size);
 *		int8_t status - returns 0 if memset was successful, -1 if unsuccessful
 **************/
 int8_t memset_dma(uint8_t * src, uint32_t length, uint8_t value);
-
-#endif
 
 
 /**************

@@ -4,6 +4,12 @@
 #include <stdint.h>
 #include <stdlib.h>
 
+#if (std==c99)
+#define INLINE_FUNC __attribute__((always_inline)) static inline
+#else
+#define INLINE_FUNC __STATIC_INLINE
+#endif
+
 /**************
 * typedef struct CB_t
 *	description: 
@@ -76,7 +82,7 @@ CB_Status_t CB_RemoveItem(CB_t * circBuf, uint8_t * item);
 *	returns:
 *		CB_Status_t status - enumeration with the state of the buffer
 **************/
-CB_Status_t CB_Full(CB_t * circBuf);
+INLINE_FUNC CB_Status_t CB_Full(CB_t * circBuf);
 
 /**************
 * CB_Empty()
@@ -87,7 +93,7 @@ CB_Status_t CB_Full(CB_t * circBuf);
 *	returns:
 *		CB_Status_t status - enumeration with the state of the buffer
 **************/
-CB_Status_t CB_Empty(CB_t * circBuf);
+INLINE_FUNC CB_Status_t CB_Empty(CB_t * circBuf);
 
 /**************
 * CB_Peek()
