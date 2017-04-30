@@ -21,6 +21,7 @@ uint8_t nrf_read_register(uint8_t reg){
 
 	// Read receive data
 	SPI_read_byte((uint8_t *)&regData);
+	SPI_read_byte((uint8_t *)&regData);
 
 	// Bring CSn back up
 	SPI_set_CSn(1);

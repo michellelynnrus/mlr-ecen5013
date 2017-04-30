@@ -5,7 +5,7 @@
 #include <stdlib.h>
 
 #if (std==c99)
-#define INLINE_FUNC __attribute__((always_inline)) static inline
+#define INLINE_FUNC static inline __attribute__((always_inline))
 #else
 #define INLINE_FUNC __STATIC_INLINE
 #endif
@@ -82,7 +82,19 @@ CB_Status_t CB_RemoveItem(CB_t * circBuf, uint8_t * item);
 *	returns:
 *		CB_Status_t status - enumeration with the state of the buffer
 **************/
-INLINE_FUNC CB_Status_t CB_Full(CB_t * circBuf);
+INLINE_FUNC CB_Status_t CB_Full(CB_t * circBuf){
+	//Check for a null pointer
+	if (!circBuf) {
+		return CB_NULL_PTR;
+	}
+
+	//Can I just do this with the count?
+	if (circBuf->count == circBuf->length){
+		return CB_FULL;
+	}
+
+	return CB_OK;
+}
 
 /**************
 * CB_Empty()
@@ -93,7 +105,20 @@ INLINE_FUNC CB_Status_t CB_Full(CB_t * circBuf);
 *	returns:
 *		CB_Status_t status - enumeration with the state of the buffer
 **************/
-INLINE_FUNC CB_Status_t CB_Empty(CB_t * circBuf);
+INLINE_FUNC CB_Status_t CB_Empty(CB_t * circBuf){
+	//Check for a null pointer
+	if (!circBuf) {
+		return CB_NULL_PTR;
+	}
+
+	//Would it also work to use the count?
+	if (circBuf->count == 0){
+		return CB_EMPTY;
+	}
+
+
+	return CB_OK;
+}
 
 /**************
 * CB_Peek()

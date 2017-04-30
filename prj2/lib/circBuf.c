@@ -39,7 +39,7 @@ CB_Status_t CB_AddItem(CB_t * circBuf, uint8_t item){
 }
 
 
-INLINE_FUNC CB_Status_t CB_RemoveItem(CB_t * circBuf, uint8_t * item){
+CB_Status_t CB_RemoveItem(CB_t * circBuf, uint8_t * item){
 	//Check for a null pointer
 	if (!circBuf) {
 		return CB_NULL_PTR;
@@ -74,9 +74,8 @@ INLINE_FUNC CB_Status_t CB_RemoveItem(CB_t * circBuf, uint8_t * item){
 	
 	return CB_OK;
 }
-
-
-INLINE_FUNC CB_Status_t CB_Full(CB_t * circBuf){
+/*
+ CB_Status_t CB_Full(CB_t * circBuf){
 	//Check for a null pointer
 	if (!circBuf) {
 		return CB_NULL_PTR;
@@ -87,7 +86,7 @@ INLINE_FUNC CB_Status_t CB_Full(CB_t * circBuf){
 		return CB_FULL;
 	}
 	
-	/*//check if tail is at boundary condition
+	/* //check if tail is at boundary condition
 	if ((circBuf->tail - circBuf->buffer) >= (length - 1)) {
 		//check if tail would catch up to head
 		if (circBuf->head == circBuf->buffer) {
@@ -96,10 +95,9 @@ INLINE_FUNC CB_Status_t CB_Full(CB_t * circBuf){
 	} else {
 		//not at boundary condition, check if tail is one element behind head
 		if (
-	*/
+	*
 	return CB_OK;
 }
-
 
 CB_Status_t CB_Empty(CB_t * circBuf){
 	//Check for a null pointer
@@ -107,10 +105,10 @@ CB_Status_t CB_Empty(CB_t * circBuf){
 		return CB_NULL_PTR;
 	} 
 	
-	/*//Check if head and tail are at the same location
+	/* //Check if head and tail are at the same location
 	if (circBuf->head == circBuf->tail){
 		return EMPTY;
-	}*/
+	}*
 	
 	//Would it also work to use the count?
 
@@ -121,7 +119,7 @@ CB_Status_t CB_Empty(CB_t * circBuf){
 	
 	return CB_OK;
 }
-
+*/
 
 CB_Status_t CB_Peek(CB_t * circBuf, uint16_t index, uint8_t * data){
 	//Check for a null pointer

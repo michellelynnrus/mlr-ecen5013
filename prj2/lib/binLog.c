@@ -89,7 +89,7 @@ binLog_Status_t binLog_DestroyItem(LOG_t *log){
 	return status;
 }
 
-binLog_Status_t binLog_LogItem_Ascii(LOG_ID_t logID, uint8_t * payload){//, uint16_t data){
+binLog_Status_t binLog_LogItem_Ascii(LOG_ID_t logID, uint8_t * payload, uint16_t data){
 	binLog_Status_t status = BINLOG_OK;
 	//uint8_t string[128];
 	//sprintf(string, "%s %d", payload, data);
@@ -102,9 +102,11 @@ binLog_Status_t binLog_LogItem_Ascii(LOG_ID_t logID, uint8_t * payload){//, uint
 		binLog_CreateItem(&log, length);
 
 		//set log item values, copy payload
-		my_itoa(&log->logID, (int32_t)logID, 10);
+		log->logID = logID;
+		my_itoa(log->logIDAscii, (int32_t)logID, 10);
 		my_memmove(payload, log->payload, length);
-		//log->data = data;
+		log->data = data;
+		my_itoa(log->dataAscii, (int32_t)data, 10);
 
 		//send item
 		binLog_Send_Ascii(log);
@@ -126,19 +128,19 @@ binLog_Status_t binLog_Send_Ascii(LOG_t * log){
 		//use existing LOG_RAW_DATA macro to send log ID + payload
 		str = "LOGID: ";
 		LOG_RAW_DATA(str, 7);
-		LOG_RAW_DATA(&(log->logID), sizeof(log->logID));
+		LOG_RAW_DATA((log->logIDAscii), strlen(log->logIDAscii));
 		if (log->payloadSize > 0){
-			//str = " - ";
-			//LOG_RAW_DATA(str, strlen(str));
-			//LOG_RAW_DATA(log->payload, log->payloadSize);
+			str = " - ";
+			LOG_RAW_DATA(str, strlen(str));
+			LOG_RAW_DATA(log->payload, log->payloadSize);
 		}
 
-		//if (log->data != NO_PAYLOAD){
-		//	LOG_RAW_DATA(&(log->data), sizeof(log->data));
-		//}
-		//str = "\n";
-		//LOG_RAW_DATA(str, strlen(str));
-		//LOG_RAW_DATA(0xA, sizeof(uint8_t));
+		if (log->data != NO_PAYLOAD){
+			LOG_RAW_DATA(&(log->dataAscii), strlen(log->dataAscii));
+		}
+		str = "\n";
+		LOG_RAW_DATA(str, strlen(str));
+		//LOG_RAW_DATA(0xD, sizeof(uint8_t));
 		LOG_FLUSH();
 	}
 

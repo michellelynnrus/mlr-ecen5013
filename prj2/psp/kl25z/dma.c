@@ -43,6 +43,9 @@
 int8_t dma0_move(uint8_t * src, uint8_t * dst, uint32_t length, uint8_t size){
 	//currently only supports both ssize and dsize the same
 
+	//Make sure DMA is not busy
+	while (DMA_DSR_BCR0 && DMA_DSR_BCR_BSY_MASK);
+
 	// Set source address register DMA_SAR0
 	DMA_SAR0 = DMA_SAR_SAR(src);
 
@@ -57,18 +60,18 @@ int8_t dma0_move(uint8_t * src, uint8_t * dst, uint32_t length, uint8_t size){
 	uint8_t sizeBits;
 		switch (size) {
 		case 32:
-			sizeBits = 0x00;
+			sizeBits = 0b00;
 			break;
 		case 8:
-			sizeBits = 0x01;
+			sizeBits = 0b01;
 			break;
 		case 16:
-			sizeBits = 0x10;
+			sizeBits = 0b10;
 			break;
 		default:
 			return -1; // invalid size
 		}
-	DMA_DCR0 = (DMA_DCR_SSIZE(size) | DMA_DCR_DSIZE(size));
+	DMA_DCR0 = (DMA_DCR_SSIZE(sizeBits) | DMA_DCR_DSIZE(sizeBits));
 	DMA_DCR0 |= (DMA_DCR_SINC_MASK | DMA_DCR_DINC_MASK);
 
 	//Enable global interrupts
@@ -92,18 +95,18 @@ extern void DMA0_IRQHandler(){
 	// BES = bus error on source
 	// BED = bus error on dest
 	if (DMA_DSR_BCR0 && DMA_DSR_BCR_CE_MASK){
-		//LOG_ITEM(ERROR, 0xC, sizeof(uint8_t));
+		//LOG_ITEM_ASCII(ERROR, "DMA ERR: Config error", NO_PAYLOAD);
 	}
 
 	if (DMA_DSR_BCR0 && DMA_DSR_BCR_BES_MASK){
-		//LOG_ITEM(ERROR, 0x1, sizeof(uint8_t));
+		//LOG_ITEM_ASCII(ERROR, "DMA ERR: Bus error on source", NO_PAYLOAD);
 	}
 
 	if (DMA_DSR_BCR0 && DMA_DSR_BCR_BED_MASK){
-		//LOG_ITEM(ERROR, 0x2, sizeof(uint8_t));
+		//LOG_ITEM_ASCII(ERROR, "DMA ERR: Bus error on dest", NO_PAYLOAD);
 	}
 
-	//LOG_ITEM(DATA_RECEIVED, 0xFF, sizeof(uint8_t));
+	//LOG_ITEM_ASCII(DATA_RECEIVED, "Normal DMA int", NO_PAYLOAD);
 
 	//Clear DONE (clears error bits)
 	DMA_DSR_BCR0 |= DMA_DSR_BCR_DONE_MASK;

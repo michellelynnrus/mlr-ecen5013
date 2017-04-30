@@ -20,7 +20,7 @@ int8_t memset_dma(uint8_t * src, uint32_t length, uint8_t value){
 	int32_t dma_status = -1;
 
 	//DMA transfer (1 byte size)
-	for (int8_t i = 0; i < length; i++){
+	for (uint32_t i = 0; i < length; i++){
 		dma_status = DMA_MOVE(&value, src+i, 1, 8);
 	}
 
@@ -52,13 +52,13 @@ int8_t my_memmove(uint8_t * src, uint8_t * dst, uint32_t length){
 		}
 	
 		//Loop through the data copy to new dst address
-		for(uint8_t i = 0; i < length; i++){
+		for(uint32_t i = 0; i < length; i++){
 			*(dst+i) = *(tmpDataPtr+i);
 		}
 	} else {
 
 		//Loop through the data copy to new dst address
-		for(uint8_t i = 0; i < length; i++){
+		for(uint32_t i = 0; i < length; i++){
 			*(dst+i) = *(src+i);
 		}
 	}
@@ -77,7 +77,7 @@ int8_t my_memset(uint8_t * src, uint32_t length, uint8_t value){
 	}
 
 	//Loop through the data and set values
-	for(uint8_t i = 0; i < length; i++){
+	for(uint32_t i = 0; i < length; i++){
 		*src = value;
 		src++;
 

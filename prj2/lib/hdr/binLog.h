@@ -43,8 +43,11 @@ typedef enum {
  */
 typedef struct {
 	LOG_ID_t logID;
+	uint8_t logIDAscii[16];
 	uint8_t * payload;
 	uint32_t payloadSize;
+	uint16_t data;
+	uint8_t dataAscii[16];
 } LOG_t;
 
 /*
@@ -106,7 +109,7 @@ binLog_Status_t binLog_Send(LOG_t * log);
 **************/
 binLog_Status_t binLog_DestroyItem(LOG_t *log);
 
-binLog_Status_t binLog_LogItem_Ascii(LOG_ID_t logID, uint8_t * payload);//, uint16_t data);
+binLog_Status_t binLog_LogItem_Ascii(LOG_ID_t logID, uint8_t * payload, uint16_t data);
 
 binLog_Status_t binLog_Send_Ascii(LOG_t * log);
 

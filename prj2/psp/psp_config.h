@@ -17,8 +17,8 @@
 #endif
 
 #ifndef UART_INT
-#define UART_INT
-//#undef UART_INT
+//#define UART_INT
+#undef UART_INT
 #endif
 
 #if PLATFORM_CODE == PLATFORM_KL25Z
