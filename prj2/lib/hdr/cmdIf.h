@@ -11,6 +11,7 @@
 typedef enum {
 	CMDIF_OK,
 	CMDIF_NULLPTR,
+	CMDIF_CHECKSUM_ERROR,
 	CMDIF_ERROR
 } cmdIf_Status_t;
 
@@ -82,9 +83,10 @@ cmdIf_Status_t cmdIf_SendCmd(CMD_ID_t cmdID, uint32_t payloadLength, uint8_t * p
 *		Verifys the command's checksum
 *	params:
 *		CMD_t * cmd - pointer to cmd object
+*		uint8_t calculatedCS - calculated checksum
 *	returns:
 *		cmdIf_Status_t status - returns OK or NULLPTR
 **************/
-cmdIf_Status_t cmdIf_VerifyCS(CMD_t *cmd);
+cmdIf_Status_t cmdIf_VerifyCS(CMD_t *cmd, uint8_t calculatedCS);
 
 #endif /* __CMDIF_H__*/

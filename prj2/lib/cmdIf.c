@@ -6,11 +6,9 @@
 #include "memory.h"
 #include "uart.h"
 
-#include <stdlib.h>
-#include <string.h>
-
 cmdIf_Status_t cmdIf_Receive(void){
 	cmdIf_Status_t status = CMDIF_OK;
+	uint8_t calcCS;
 	CMD_t * cmd;
 	
 	//first byte is cmdID
@@ -18,17 +16,17 @@ cmdIf_Status_t cmdIf_Receive(void){
 	PSP_CMDIF_RECEIVE(&dataIn);
 	CMD_ID_t cmdID_in = (CMD_ID_t)dataIn;
 	
-	uint8_t string[64];
-	sprintf(string, "Byte 0, cmdID = 0x%x", dataIn);
-	LOG_ITEM_ASCII(INFO, string, NO_PAYLOAD);
+	LOG_ITEM_ASCII(INFO, "Byte 0, cmdID = ", dataIn);
 	
 	//second byte is payload size
 	PSP_CMDIF_RECEIVE(&dataIn);
 	uint8_t payloadLen_in = dataIn;
 	
-	sprintf(string, "Byte 1, size = 0x%x", dataIn);
-	LOG_ITEM_ASCII(INFO, string, NO_PAYLOAD);
+	LOG_ITEM_ASCII(INFO, "Byte 1, size = ", dataIn);
 	
+	//start calculating the CS
+	calcCS = cmdID_in ^ payloadLen_in;
+
 	//go make the cmd object
 	cmdIf_CreateCmdObj(&cmd, payloadLen_in);
 	
@@ -41,8 +39,10 @@ cmdIf_Status_t cmdIf_Receive(void){
 		PSP_CMDIF_RECEIVE(&dataIn);
 		*(cmd->payload + i) = dataIn;
 		
-		sprintf(string, "Byte %d, data[i] = 0x%x", i, dataIn);
-		LOG_ITEM_ASCII(INFO, string, NO_PAYLOAD);
+		LOG_ITEM_ASCII(INFO, "Byte i, data[i] = ", dataIn);
+
+		//continue calculating CS
+		calcCS = calcCS ^ dataIn;
 	
 	}
 	
@@ -50,10 +50,9 @@ cmdIf_Status_t cmdIf_Receive(void){
 	PSP_CMDIF_RECEIVE(&dataIn);
 	cmd->checksum = dataIn;
 	
-	sprintf(string, "Byte x, CS = 0x%x", dataIn);
-	LOG_ITEM_ASCII(INFO, string, NO_PAYLOAD);
+	LOG_ITEM_ASCII(INFO, "Byte x, CS = ", dataIn);
 	
-	status = cmdIf_VerifyCS(cmd);
+	status = cmdIf_VerifyCS(cmd, calcCS);
 	
 	if (status == CMDIF_OK){
 		//decode cmd and decide what callback ftn to call
@@ -65,6 +64,9 @@ cmdIf_Status_t cmdIf_Receive(void){
 		} else {
 			//todo: probably should log an error here
 		}
+	} else if (status == CMDIF_CHECKSUM_ERROR){
+		LOG_ITEM_ASCII(ERROR, "CMD Checksum incorrect", NO_PAYLOAD);
+
 	} else {
 		//todo: probably should log an error here
 	}
@@ -125,10 +127,17 @@ cmdIf_Status_t cmdIf_DestroyCmdObj(CMD_t *cmd){
 cmdIf_Status_t cmdIf_Decode(CMD_t *cmd){
 	cmdIf_Status_t status = CMDIF_OK;
 	uint8_t string[64];
-	switch(cmd->cmdID){
-		sprintf(string, "DECODE cmdID = 0x%x", cmd->cmdID);
-		LOG_ITEM_ASCII(INFO, string, NO_PAYLOAD);
 
+	LOG_ITEM_ASCII(INFO, "DECODE cmdID = ", cmd->cmdID);
+
+	if (cmd->cmdID < NUM_VALID_CIDS){
+		cmd->ftnCallback = CMD_CallbackArr[cmd->cmdID];
+	} else {
+		LOG_ITEM_ASCII(ERROR, "DECODE ERROR: invalid cmd ID", NO_PAYLOAD);
+	}
+
+	/*
+	 * switch(cmd->cmdID){
 		case LED_SET_EN_STATE_CID:
 			cmd->ftnCallback = CMD_LEDSetEnState;
 			LOG_ITEM_ASCII(INFO, "DECODE CMD_LEDSetEnState", NO_PAYLOAD);
@@ -150,8 +159,11 @@ cmdIf_Status_t cmdIf_Decode(CMD_t *cmd){
 			sprintf(string, "Invalid cmdID = 0x%x", cmd->cmdID);
 			LOG_ITEM_ASCII(ERROR, string, NO_PAYLOAD);
 			break;
+
+		}
+	*/
+
 	
-	}
 	
 	
 	
@@ -183,9 +195,12 @@ cmdIf_Status_t cmdIf_SendCmd(CMD_ID_t cmdID, uint32_t payloadLength, uint8_t * p
 }
 
 
-cmdIf_Status_t cmdIf_VerifyCS(CMD_t *cmd){
+cmdIf_Status_t cmdIf_VerifyCS(CMD_t *cmd, uint8_t calculatedCS){
 	cmdIf_Status_t status = CMDIF_OK;
 
+	if (calculatedCS != cmd->checksum){
+		status = CMDIF_CHECKSUM_ERROR;
+	}
 	
 	
 	return status;

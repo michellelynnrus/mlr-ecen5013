@@ -21,15 +21,15 @@ void sys_init_kl25z(void){
 
 	//enable pin for GPIO output direction
 	//RED LED
-	PORTB_PCR18 = PORT_PCR_MUX(0x01);
+	PORTB_PCR18 = PORT_PCR_MUX(0x03);
 	GPIOB_PDDR |= (1 << 18);
-	GPIOB_PSOR |= (1 << 18);
+	//GPIOB_PSOR |= (1 << 18);
 
 	//GREEN LED
-	PORTB_PCR19 = PORT_PCR_MUX(0x01);
+	PORTB_PCR19 = PORT_PCR_MUX(0x03);
 	GPIOB_PDDR |= (1 << 19);
 	//GPIOB_PSOR |= (1 << 19);
-	GPIOB_PCOR |= (1 << 19);
+	//GPIOB_PCOR |= (1 << 19);
 
 	/*//BLUE LED use this if SPI is moved
 	PORTD_PCR1 = PORT_PCR_MUX(0x01);

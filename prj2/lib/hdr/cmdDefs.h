@@ -49,12 +49,12 @@ void CMD_GetTime(uint8_t length, uint8_t * payload);
 *		NULLPTR - Circular buffer pointer is null
 *		UNKNOWN_ERROR - You broke something (may not be used)
 **************/
-/*void (* CMD_CallbackArr[NUM_VALID_CIDS])(uint8_t length, uint8_t * payload) = {
+void (* CMD_CallbackArr[NUM_VALID_CIDS])(uint8_t length, uint8_t * payload) = {
 	CMD_LEDSetEnState,
 	CMD_LEDSetPWM,
 	CMD_Reset,
 	CMD_GetTime
-};*/
+};
 
 /**************
 * typedef struct CMD_t

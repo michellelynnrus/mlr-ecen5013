@@ -14,6 +14,7 @@ void project_4_report(void){
 	//Initialize system
 	SYS_INIT();
 	COUNTER_INIT();
+	pwm_init();
 	PSP_CMDIF_INIT();
 
 	LOG_ITEM_ASCII(INFO, "******stuff is happening", NO_PAYLOAD);
