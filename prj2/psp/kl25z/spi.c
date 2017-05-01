@@ -4,16 +4,17 @@
 * SPI_init()
 **************/
 SPI_status_t SPI_init(void){
-	//Configure clocks - PORTD & SPI0 clock gate enable
-	SIM_SCGC5 |= SIM_SCGC5_PORTD_MASK;
+	//Configure clocks - PORTB & SPI0 clock gate enable
+	//SIM_SCGC5 |= SIM_SCGC5_PORTB_MASK;
 	SIM_SCGC4 |= SIM_SCGC4_SPI0_MASK;
 
+	//switch to these for use with logic analyzer
+	SIM_SCGC5 |= SIM_SCGC5_PORTD_MASK;
 	//Configure port pins PTD 0-13 for ALT2
 	PORTD_PCR0 = PORT_PCR_MUX(0x01); //SPI0_PCS0, J2 06
 	PORTD_PCR1 = PORT_PCR_MUX(0x02); //SPI0_SCK, J2 12
 	PORTD_PCR2 = PORT_PCR_MUX(0x02); //SPI0_MOSI/bidir MOMI, J2 08
 	PORTD_PCR3 = PORT_PCR_MUX(0x02); //SPI0_MISO/bidir unused, J2 10
-
 
 
 	//Configure SPI peripheral

@@ -3,8 +3,9 @@
 #include "project_1.h"
 #include "project_2.h"
 #include "project_3.h"
+#include "project_4.h"
 
-#define PROJECT 3
+#define PROJECT 4
 
 int main(void){
 	
@@ -15,6 +16,8 @@ int main(void){
 	project_2_report();
 #elif (PROJECT==3)
 	project_3_report();
+#elif (PROJECT==4)
+	project_4_report();
 #else
 	//Future projects go here
 	//Compile time switch can be defined as 2, 3, etc to specify different projects

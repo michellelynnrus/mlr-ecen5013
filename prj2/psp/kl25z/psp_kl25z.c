@@ -12,8 +12,8 @@ void sys_init_kl25z(void){
 	//Enable port clock(s)
 	SIM_SCGC5 |= SIM_SCGC5_PORTA_MASK;
 	SIM_SCGC5 |= SIM_SCGC5_PORTB_MASK;
-	//SIM_SCGC5 |= SIM_SCGC5_PORTC_MASK;
-	//SIM_SCGC5 |= SIM_SCGC5_PORTD_MASK;
+	SIM_SCGC5 |= SIM_SCGC5_PORTC_MASK;
+	SIM_SCGC5 |= SIM_SCGC5_PORTD_MASK;
 	//SIM_SCGC5 |= SIM_SCGC5_PORTE_MASK;
 
 	//For hw5
@@ -22,16 +22,20 @@ void sys_init_kl25z(void){
 	//enable pin for GPIO output direction
 	//RED LED
 	PORTB_PCR18 = PORT_PCR_MUX(0x01);
-	GPIOB_PDDR = (1 << 18);
+	GPIOB_PDDR |= (1 << 18);
+	GPIOB_PSOR |= (1 << 18);
 
-	GPIOB_PSOR = (1 << 18);
+	//GREEN LED
+	PORTB_PCR19 = PORT_PCR_MUX(0x01);
+	GPIOB_PDDR |= (1 << 19);
+	//GPIOB_PSOR |= (1 << 19);
+	GPIOB_PCOR |= (1 << 19);
 
-	//BLUE LED
-	//PORTD_PCR1 = PORT_PCR_MUX(0x01);
-	//GPIOD_PDDR = (1 << 1);
-
-	//GPIOD_PSOR = (1 << 1);
-
+	/*//BLUE LED use this if SPI is moved
+	PORTD_PCR1 = PORT_PCR_MUX(0x01);
+	GPIOD_PDDR |= (1 << 1);
+	GPIOD_PSOR |= (1 << 1);
+	 */
 	LOG_INIT();
 
 	//insert GPIO initialization here (i.e. input, outputs, etc)

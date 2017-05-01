@@ -4,6 +4,7 @@
 #include "fsl_device_registers.h"
 #include "dma.h"
 #include "timer.h"
+#include "gpio.h"
 
 //DMA is supported on this board
 #define DMA_SUPPORTED

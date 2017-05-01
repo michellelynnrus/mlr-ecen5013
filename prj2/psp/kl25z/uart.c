@@ -147,7 +147,7 @@ UART_Status_t uart_receive_byte(uint8_t * byte){
 		//Store data from UART0 data register in data ptr
 		*byte = (uint8_t)UART0_D;
 
-		LOG_ITEM(DATA_RECEIVED, byte, sizeof(uint8_t));
+		//LOG_ITEM(DATA_RECEIVED, byte, sizeof(uint8_t));
 #endif
 
 	}

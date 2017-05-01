@@ -21,6 +21,11 @@
 #undef UART_INT
 #endif
 
+#ifndef CMD_NORDIC
+//#define CMD_NORDIC
+#undef CMD_NORDIC
+#endif
+
 #if PLATFORM_CODE == PLATFORM_KL25Z
 #include "psp_kl25z.h"
 #endif
